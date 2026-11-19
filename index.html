@@ -1,1 +1,117 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOVIETOK</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #101014;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+header {
+  padding: 22px;
+  background: #191920;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  color: #ff3155;
+  font-size: 27px;
+  font-weight: bold;
+}
+.hero {
+  padding: 65px 22px;
+  background: linear-gradient(120deg,#39152c,#171727);
+}
+.hero h1 { font-size: 38px; }
+.hero p { color: #ccc; }
+button {
+  background: #ff3155;
+  color: white;
+  border: 0;
+  padding: 13px 22px;
+  border-radius: 7px;
+  font-weight: bold;
+}
+section { padding: 22px; }
+.movies {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+}
+.movie {
+  background: #202028;
+  padding: 18px;
+  border-radius: 10px;
+}
+.poster {
+  height: 130px;
+  background: linear-gradient(135deg,#642c65,#252b50);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 35px;
+}
+.movie h3 { margin-bottom: 5px; }
+.movie p { color: #aaa; font-size: 13px; }
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #999;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MOVIETOK</div>
+  <div>☰</div>
+</header>
+
+<div class="hero">
+  <h1>Discover Your Next Movie.</h1>
+  <p>Explore movies, discover stories and find your next favourite.</p>
+  <button onclick="document.getElementById('movies').scrollIntoView()">
+    Explore Movies
+  </button>
+</div>
+
+<section id="movies">
+  <h2>Popular Movies</h2>
+  <div class="movies">
+    <div class="movie">
+      <div class="poster">🎬</div>
+      <h3>Action Movies</h3>
+      <p>Explore action and adventure.</p>
+    </div>
+    <div class="movie">
+      <div class="poster">❤️</div>
+      <h3>Romance</h3>
+      <p>Discover beautiful love stories.</p>
+    </div>
+    <div class="movie">
+      <div class="poster">👻</div>
+      <h3>Horror</h3>
+      <p>Explore thrilling horror films.</p>
+    </div>
+    <div class="movie">
+      <div class="poster">😂</div>
+      <h3>Comedy</h3>
+      <p>Find something fun to watch.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 MOVIETOK. All rights reserved.
+</footer>
+
+</body>
+</html>
+
