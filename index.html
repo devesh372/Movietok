@@ -17,10 +17,11 @@ body{
 }
 
 header{
- padding:20px;
+ padding:18px 20px;
  background:#17171f;
  display:flex;
  justify-content:space-between;
+ align-items:center;
 }
 
 .logo{
@@ -37,30 +38,29 @@ header{
 
 .search{
  display:flex;
- max-width:500px;
+ max-width:550px;
  margin:25px auto;
 }
 
 input{
  flex:1;
  min-width:0;
- padding:14px;
+ padding:15px;
  border:0;
  border-radius:8px 0 0 8px;
+ font-size:16px;
 }
 
 button{
- padding:12px;
+ padding:12px 17px;
  background:#ff3155;
  color:white;
  border:0;
- border-radius:5px;
+ border-radius:6px;
  cursor:pointer;
 }
 
-.search button{
- border-radius:0 8px 8px 0;
-}
+.search button{border-radius:0 8px 8px 0}
 
 section{padding:20px}
 
@@ -75,28 +75,27 @@ section{padding:20px}
  border-radius:10px;
  overflow:hidden;
  cursor:pointer;
- transition:transform .2s;
 }
-
-.movie:hover{transform:scale(1.03)}
 
 .poster{
  width:100%;
  display:block;
  aspect-ratio:2/3;
  object-fit:cover;
+ background:#292933;
 }
 
 .movie-info{padding:12px}
 
 .movie h3{
- font-size:16px;
+ font-size:15px;
  margin:0 0 8px;
 }
 
 .movie p{
  color:#ffc44d;
  font-size:13px;
+ margin:5px 0;
 }
 
 .status{color:#aaa}
@@ -106,22 +105,18 @@ section{padding:20px}
 .back-button{
  background:#292933;
  font-size:20px;
- padding:10px 16px;
- border-radius:50%;
  margin-bottom:15px;
 }
 
 .backdrop{
  width:100%;
- max-height:380px;
+ max-height:400px;
  object-fit:cover;
  border-radius:12px;
 }
 
-.details-content{padding:15px 5px}
-
 .details-title{
- font-size:27px;
+ font-size:29px;
  margin:15px 0;
 }
 
@@ -139,16 +134,66 @@ section{padding:20px}
  display:inline-block;
  background:#292933;
  padding:8px 12px;
- margin:5px 5px 5px 0;
+ margin:5px;
  border-radius:20px;
  font-size:13px;
 }
 
-.hidden{display:none!important}
+.info-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+ margin:20px 0;
+}
+
+.info-box{
+ background:#1c1c25;
+ padding:13px;
+ border-radius:9px;
+}
+
+.info-box small{
+ display:block;
+ color:#aaa;
+ margin-bottom:6px;
+}
+
+.cast-grid{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:12px;
+}
+
+.cast-card{
+ background:#1c1c25;
+ border-radius:9px;
+ overflow:hidden;
+}
+
+.cast-card img{
+ width:100%;
+ aspect-ratio:2/3;
+ object-fit:cover;
+ display:block;
+}
+
+.cast-card p{
+ font-size:12px;
+ padding:0 8px;
+ line-height:1.4;
+}
+
+.trailer{
+ width:100%;
+ aspect-ratio:16/9;
+ border:0;
+ border-radius:10px;
+}
 
 @media(min-width:700px){
- .movies{grid-template-columns:repeat(4,minmax(0,1fr))}
- #detailsPage{max-width:900px;margin:auto}
+ .movies{grid-template-columns:repeat(5,minmax(0,1fr))}
+ #detailsPage{max-width:950px;margin:auto}
+ .cast-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
 }
 </style>
 </head>
@@ -164,16 +209,16 @@ section{padding:20px}
 
  <div class="hero">
   <h1>Discover Your Next Movie.</h1>
-  <p>Find your next favourite story.</p>
+  <p>Hollywood, Bollywood, Tollywood and movies worldwide.</p>
 
   <div class="search">
-   <input id="searchInput" placeholder="Search movies...">
+   <input id="searchInput" placeholder="Search any movie...">
    <button onclick="searchMovies()">Search</button>
   </div>
  </div>
 
  <section>
-  <h2>Popular Movies</h2>
+  <h2 id="sectionTitle">Popular Movies</h2>
   <p class="status" id="status">Loading movies...</p>
   <div class="movies" id="movieList"></div>
  </section>
@@ -183,20 +228,45 @@ section{padding:20px}
 <div id="detailsPage">
  <section>
 
-  <button class="back-button" onclick="goBack()">←</button>
+  <button class="back-button" onclick="goBack()">← Back</button>
 
-  <img id="backdrop" class="backdrop" src="" alt="Movie backdrop">
+  <img id="backdrop" class="backdrop" alt="Movie backdrop">
 
-  <div class="details-content">
-   <h1 class="details-title" id="detailTitle"></h1>
+  <h1 class="details-title" id="detailTitle"></h1>
+  <p class="details-meta" id="detailMeta"></p>
 
-   <p class="details-meta" id="detailMeta"></p>
+  <div id="detailGenres"></div>
 
-   <div id="detailGenres"></div>
+  <div class="info-grid">
+   <div class="info-box">
+    <small>Director</small>
+    <strong id="director">Unknown</strong>
+   </div>
 
-   <h3>Overview</h3>
-   <p class="overview" id="detailOverview"></p>
+   <div class="info-box">
+    <small>Runtime</small>
+    <strong id="runtime">Unknown</strong>
+   </div>
+
+   <div class="info-box">
+    <small>Language</small>
+    <strong id="language">Unknown</strong>
+   </div>
+
+   <div class="info-box">
+    <small>Status</small>
+    <strong id="movieStatus">Unknown</strong>
+   </div>
   </div>
+
+  <h3>Overview</h3>
+  <p class="overview" id="detailOverview"></p>
+
+  <h3>Main Cast</h3>
+  <div class="cast-grid" id="castList"></div>
+
+  <h3>Official Trailer</h3>
+  <div id="trailerContainer"></div>
 
  </section>
 </div>
@@ -204,24 +274,20 @@ section{padding:20px}
 <script>
 const list = document.getElementById("movieList");
 const statusText = document.getElementById("status");
-
 const homePage = document.getElementById("homePage");
 const detailsPage = document.getElementById("detailsPage");
 
 async function loadMovies(query = "") {
-
  statusText.textContent = "Loading movies...";
- list.innerHTML = "";
+ list.replaceChildren();
 
  try {
-
   const endpoint = query
    ? `/api/movies?query=${encodeURIComponent(query)}`
    : "/api/movies";
 
   const response = await fetch(endpoint);
-
-  if (!response.ok) throw new Error("API request failed");
+  if (!response.ok) throw new Error("Movie search failed");
 
   const data = await response.json();
 
@@ -233,75 +299,82 @@ async function loadMovies(query = "") {
   statusText.textContent = "";
 
   data.results.forEach(movie => {
-
    const card = document.createElement("div");
    card.className = "movie";
 
-   const poster = movie.poster_path
+   const poster = document.createElement("img");
+   poster.className = "poster";
+   poster.alt = movie.title || "Movie poster";
+   poster.src = movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : "";
 
-   card.innerHTML = `
-    ${poster
-      ? `<img class="poster" src="${poster}" alt="Movie poster">`
-      : `<div class="poster">🎬</div>`}
+   const info = document.createElement("div");
+   info.className = "movie-info";
 
-    <div class="movie-info">
-     <h3></h3>
-     <p>⭐ ${Number(movie.vote_average || 0).toFixed(1)}/10</p>
-    </div>
-   `;
+   const title = document.createElement("h3");
+   title.textContent = movie.title || "Untitled";
 
-   card.querySelector("h3").textContent = movie.title;
+   const rating = document.createElement("p");
+   rating.textContent =
+    `⭐ ${Number(movie.vote_average || 0).toFixed(1)}/10`;
 
-   card.addEventListener("click", () => {
-    showDetails(movie.id);
-   });
+   info.append(title, rating);
+   card.append(poster, info);
 
+   card.addEventListener("click", () => showDetails(movie.id));
    list.appendChild(card);
-
   });
 
  } catch (error) {
-  statusText.textContent = "Unable to load movies. Please try again.";
+  statusText.textContent =
+   "Unable to load movies. Please try again.";
   console.error(error);
  }
 }
 
 async function showDetails(id) {
-
  homePage.style.display = "none";
  detailsPage.style.display = "block";
+ window.scrollTo(0, 0);
 
- document.getElementById("detailTitle").textContent = "Loading...";
- document.getElementById("detailMeta").textContent = "";
- document.getElementById("detailGenres").innerHTML = "";
- document.getElementById("detailOverview").textContent = "";
- document.getElementById("backdrop").style.display = "none";
+ const title = document.getElementById("detailTitle");
+ const meta = document.getElementById("detailMeta");
+ const overview = document.getElementById("detailOverview");
+ const backdrop = document.getElementById("backdrop");
+ const genres = document.getElementById("detailGenres");
+ const castList = document.getElementById("castList");
+ const trailerContainer =
+  document.getElementById("trailerContainer");
+
+ title.textContent = "Loading...";
+ meta.textContent = "";
+ overview.textContent = "";
+ genres.replaceChildren();
+ castList.replaceChildren();
+ trailerContainer.replaceChildren();
+ backdrop.style.display = "none";
 
  try {
-
   const response = await fetch(`/api/movies?id=${id}`);
-
   if (!response.ok) throw new Error("Details unavailable");
 
   const movie = await response.json();
 
-  document.getElementById("detailTitle").textContent = movie.title;
+  title.textContent = movie.title || "Unknown title";
 
-  document.getElementById("detailMeta").textContent =
-   `⭐ ${Number(movie.vote_average || 0).toFixed(1)}/10  |  Release: ${movie.release_date || "Unknown"}`;
+  meta.textContent =
+   `⭐ ${Number(movie.vote_average || 0).toFixed(1)}/10` +
+   ` | Release: ${movie.release_date || "Unknown"}`;
 
-  document.getElementById("detailOverview").textContent =
+  overview.textContent =
    movie.overview || "No overview available.";
 
   if (movie.backdrop_path) {
-   const backdrop = document.getElementById("backdrop");
-   backdrop.src = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
+   backdrop.src =
+    `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
    backdrop.style.display = "block";
   }
-
-  const genres = document.getElementById("detailGenres");
 
   (movie.genres || []).forEach(genre => {
    const tag = document.createElement("span");
@@ -310,25 +383,94 @@ async function showDetails(id) {
    genres.appendChild(tag);
   });
 
+  const director = (movie.credits?.crew || [])
+   .find(person => person.job === "Director");
+
+  document.getElementById("director").textContent =
+   director?.name || "Unknown";
+
+  document.getElementById("runtime").textContent =
+   movie.runtime ? `${movie.runtime} minutes` : "Unknown";
+
+  document.getElementById("language").textContent =
+   movie.original_language?.toUpperCase() || "Unknown";
+
+  document.getElementById("movieStatus").textContent =
+   movie.status || "Unknown";
+
+  (movie.credits?.cast || []).slice(0, 12).forEach(person => {
+   const card = document.createElement("div");
+   card.className = "cast-card";
+
+   const photo = document.createElement("img");
+   photo.alt = person.name || "Cast member";
+   photo.loading = "lazy";
+   photo.src = person.profile_path
+    ? `https://image.tmdb.org/t/p/w185${person.profile_path}`
+    : "";
+
+   const name = document.createElement("p");
+   name.textContent = person.name || "Unknown";
+
+   const character = document.createElement("p");
+   character.textContent = person.character || "";
+
+   card.append(photo, name, character);
+   castList.appendChild(card);
+  });
+
+  const trailer = (movie.videos?.results || []).find(video =>
+   video.site === "YouTube" &&
+   video.type === "Trailer" &&
+   video.key
+  );
+
+  if (trailer) {
+   const frame = document.createElement("iframe");
+   frame.className = "trailer";
+   frame.src =
+    `https://www.youtube-nocookie.com/embed/${encodeURIComponent(trailer.key)}`;
+   frame.title = "Movie trailer";
+   frame.allowFullscreen = true;
+   frame.referrerPolicy = "strict-origin-when-cross-origin";
+   trailerContainer.appendChild(frame);
+  } else {
+   trailerContainer.textContent = "No trailer available.";
+  }
+
  } catch (error) {
-  document.getElementById("detailTitle").textContent = "Unable to load movie details.";
+  title.textContent = "Unable to load movie details.";
   console.error(error);
  }
+}
+
+function searchMovies() {
+ const query =
+  document.getElementById("searchInput").value.trim();
+
+ if (!query) {
+  document.getElementById("sectionTitle").textContent =
+   "Popular Movies";
+  loadMovies();
+  return;
+ }
+
+ document.getElementById("sectionTitle").textContent =
+  `Search results for "${query}"`;
+
+ loadMovies(query);
 }
 
 function goBack() {
  detailsPage.style.display = "none";
  homePage.style.display = "block";
+ window.scrollTo(0, 0);
 }
 
-function searchMovies() {
- const query = document.getElementById("searchInput").value.trim();
- loadMovies(query);
-}
-
-document.getElementById("searchInput").addEventListener("keydown", event => {
- if (event.key === "Enter") searchMovies();
-});
+document.getElementById("searchInput")
+ .addEventListener("keydown", event => {
+  if (event.key === "Enter") searchMovies();
+ });
 
 loadMovies();
 </script>
