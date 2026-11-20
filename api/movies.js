@@ -4,9 +4,7 @@ export default async function handler(req, res) {
     const token = process.env.TMDB_ACCESS_TOKEN;
 
     if (!token) {
-      return res.status(500).json({
-        error: "TMDB token is not configured"
-      });
+      return res.status(500).json({ error: "TMDB token missing" });
     }
 
     const { query, id } = req.query;
@@ -29,7 +27,6 @@ export default async function handler(req, res) {
       return response.json();
     }
 
-    // Movie details
     if (id) {
       const movie = await tmdb(
         `/movie/${encodeURIComponent(id)}` +
@@ -39,48 +36,18 @@ export default async function handler(req, res) {
       return res.status(200).json(movie);
     }
 
-    // Trending movies
     if (!query || !query.trim()) {
       return res.status(200).json(
         await tmdb("/trending/movie/week")
       );
     }
 
-    const search = query.trim();
-
-    // Search the entered spelling
-    const exact = await tmdb(
-      `/search/movie?query=${encodeURIComponent(search)}` +
-      "&include_adult=false&language=en-US"
-    );
-
-    // Also search popular and trending movies
-    const pages = await Promise.all([
-      tmdb("/movie/popular?page=1"),
-      tmdb("/movie/popular?page=2"),
-      tmdb("/movie/popular?page=3"),
-      tmdb("/trending/movie/week")
-    ]);
-
-    const allMovies = [
-      ...(exact.results || []),
-      ...pages.flatMap(page => page.results || [])
-    ];
-
-    // Remove duplicate movies
-    const uniqueMovies = [
-      ...new Map(
-        allMovies.map(movie => [movie.id, movie])
-      ).values()
-    ];
+    const input = query.trim();
 
     function normalize(value) {
-      return value
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "");
+      return value.toLowerCase().replace(/[^a-z0-9]/g, "");
     }
 
-    // Calculate spelling difference
     function distance(a, b) {
       const row = Array.from(
         { length: b.length + 1 },
@@ -107,32 +74,86 @@ export default async function handler(req, res) {
       return row[b.length];
     }
 
-    const wanted = normalize(search);
+    const words = new Set([input]);
 
-    // Rank spelling similarity and movie popularity
-    const ranked = uniqueMovies
-      .filter(movie => movie.title)
+    // Generate possible corrections for a single word.
+    const clean = normalize(input);
+
+    if (clean.length >= 5 && clean.length <= 18) {
+      const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+      for (let i = 0; i < clean.length; i++) {
+        const removed = clean.slice(0, i) + clean.slice(i + 1);
+        words.add(removed);
+
+        for (const letter of alphabet) {
+          const changed =
+            clean.slice(0, i) + letter + clean.slice(i + 1);
+
+          words.add(changed);
+        }
+
+        for (const letter of alphabet) {
+          const inserted =
+            clean.slice(0, i) + letter + clean.slice(i);
+
+          words.add(inserted);
+        }
+      }
+    }
+
+    const candidates = [...words]
+      .filter(word => normalize(word).length >= 3)
+      .slice(0, 60);
+
+    const searches = await Promise.all(
+      candidates.map(async word => {
+        try {
+          return await tmdb(
+            `/search/movie?query=${encodeURIComponent(word)}` +
+            "&include_adult=false&language=en-US"
+          );
+        } catch {
+          return { results: [] };
+        }
+      })
+    );
+
+    const movies = [
+      ...new Map(
+        searches
+          .flatMap(result => result.results || [])
+          .map(movie => [movie.id, movie])
+      ).values()
+    ];
+
+    const wanted = normalize(input);
+
+    const ranked = movies
       .map(movie => {
-        const title = normalize(movie.title);
-        const maxLength = Math.max(wanted.length, title.length);
+        const title = normalize(movie.title || "");
+        const difference = distance(wanted, title);
+        const longest = Math.max(wanted.length, title.length);
 
-        const similarity = maxLength
-          ? 1 - distance(wanted, title) / maxLength
+        const similarity = longest
+          ? 1 - difference / longest
           : 0;
 
-        const popularityBonus =
-          Math.min(Math.log10((movie.popularity || 0) + 1) / 4, 1) * 0.25;
-
-        const votesBonus =
-          Math.min(Math.log10((movie.vote_count || 0) + 1) / 5, 1) * 0.10;
-
-        return {
-          movie,
-          score: similarity + popularityBonus + votesBonus
-        };
+        return { movie, similarity, difference };
       })
-      .filter(item => item.score >= 0.55)
-      .sort((a, b) => b.score - a.score);
+      .filter(item =>
+        item.difference <= Math.max(2, Math.floor(wanted.length * 0.2))
+      )
+      .sort((a, b) => {
+        if (a.difference !== b.difference) {
+          return a.difference - b.difference;
+        }
+
+        return (
+          (b.movie.vote_count || 0) -
+          (a.movie.vote_count || 0)
+        );
+      });
 
     return res.status(200).json({
       page: 1,
