@@ -4,196 +4,217 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOVIETOK | Movies & TV Shows</title>
+<title>MOVIETOK | Discover Movies</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
- margin:0;
- background:#0d0d12;
- color:white;
- font-family:Arial,sans-serif;
+* {
+  box-sizing: border-box;
 }
 
-header{
- padding:18px 20px;
- background:#17171f;
- display:flex;
- justify-content:space-between;
- align-items:center;
+body {
+  margin: 0;
+  background: #101014;
+  color: white;
+  font-family: Arial, sans-serif;
 }
 
-.logo{
- color:#ff3155;
- font-size:27px;
- font-weight:bold;
+header {
+  padding: 20px;
+  background: #191920;
+  text-align: center;
+  border-bottom: 2px solid #ff3155;
 }
 
-.hero{
- padding:45px 20px;
- text-align:center;
- background:linear-gradient(120deg,#46142c,#171727);
+.logo {
+  color: #ff3155;
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
-.search{
- display:flex;
- max-width:550px;
- margin:25px auto;
+header p {
+  color: #aaa;
+  margin-bottom: 0;
 }
 
-input{
- flex:1;
- min-width:0;
- padding:15px;
- border:0;
- border-radius:8px 0 0 8px;
- font-size:16px;
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
 }
 
-button{
- padding:12px 17px;
- background:#ff3155;
- color:white;
- border:0;
- border-radius:6px;
- cursor:pointer;
+h2 {
+  margin-top: 28px;
 }
 
-.search button{border-radius:0 8px 8px 0}
-
-section{padding:20px}
-
-.movies{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:15px;
+.search {
+  display: flex;
+  margin: 25px 0;
 }
 
-.movie{
- background:#1c1c25;
- border-radius:10px;
- overflow:hidden;
- cursor:pointer;
+.search input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  background: #24242d;
+  border: 1px solid #444;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px 0 0 8px;
+  outline: none;
 }
 
-.poster{
- width:100%;
- display:block;
- aspect-ratio:2/3;
- object-fit:cover;
- background:#292933;
+.search button {
+  background: #ff3155;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 0 8px 8px 0;
 }
 
-.movie-info{padding:12px}
-
-.movie h3{
- font-size:15px;
- margin:0 0 8px;
+.genre-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0 25px;
 }
 
-.movie p{
- color:#ffc44d;
- font-size:13px;
- margin:5px 0;
+.genre-buttons button {
+  background: #292933;
+  color: white;
+  border: 1px solid #ff3155;
+  border-radius: 20px;
+  padding: 10px 16px;
+  cursor: pointer;
 }
 
-.status{color:#aaa}
-
-#detailsPage{display:none}
-
-.back-button{
- background:#292933;
- font-size:20px;
- margin-bottom:15px;
+.genre-buttons button:hover {
+  background: #ff3155;
 }
 
-.backdrop{
- width:100%;
- max-height:400px;
- object-fit:cover;
- border-radius:12px;
+.movies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
 }
 
-.details-title{
- font-size:29px;
- margin:15px 0;
+.movie-card {
+  background: #1c1c24;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-.details-meta{
- color:#ffc44d;
- line-height:1.8;
+.movie-card:hover {
+  transform: translateY(-5px);
 }
 
-.overview{
- color:#ccc;
- line-height:1.7;
+.movie-card img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background: #292933;
 }
 
-.genre{
- display:inline-block;
- background:#292933;
- padding:8px 12px;
- margin:5px;
- border-radius:20px;
- font-size:13px;
+.movie-info {
+  padding: 12px;
 }
 
-.info-grid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:12px;
- margin:20px 0;
+.movie-info h3 {
+  font-size: 15px;
+  margin: 0 0 8px;
 }
 
-.info-box{
- background:#1c1c25;
- padding:13px;
- border-radius:9px;
+.rating {
+  color: #ffd166;
+  font-size: 13px;
 }
 
-.info-box small{
- display:block;
- color:#aaa;
- margin-bottom:6px;
+.media-type {
+  color: #ff8299;
+  font-size: 12px;
+  margin-top: 7px;
 }
 
-.cast-grid{
- display:grid;
- grid-template-columns:repeat(3,minmax(0,1fr));
- gap:12px;
+.status {
+  color: #aaa;
 }
 
-.cast-card{
- background:#1c1c25;
- border-radius:9px;
- overflow:hidden;
+.details {
+  display: none;
+  background: #1c1c24;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
 }
 
-.cast-card img{
- width:100%;
- aspect-ratio:2/3;
- object-fit:cover;
- display:block;
+.details img {
+  width: 180px;
+  max-width: 100%;
+  border-radius: 10px;
 }
 
-.cast-card p{
- font-size:12px;
- padding:0 8px;
- line-height:1.4;
+.detail-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.trailer{
- width:100%;
- aspect-ratio:16/9;
- border:0;
- border-radius:10px;
+.detail-text {
+  flex: 1;
+  min-width: 200px;
 }
 
-@media(min-width:700px){
- .movies{grid-template-columns:repeat(5,minmax(0,1fr))}
- #detailsPage{max-width:950px;margin:auto}
- .cast-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+.details h2 {
+  margin-top: 0;
+  color: #ff526f;
+}
+
+.details p {
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.back-button {
+  background: #ff3155;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.trailer {
+  width: 100%;
+  max-width: 700px;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 10px;
+}
+
+.cast-list {
+  color: #ccc;
+  line-height: 1.8;
+}
+
+@media (max-width: 500px) {
+  main {
+    padding: 14px;
+  }
+
+  .movies {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .search button {
+    padding: 12px;
+  }
 }
 </style>
 </head>
@@ -201,331 +222,290 @@ section{padding:20px}
 <body>
 
 <header>
- <div class="logo">MOVIETOK</div>
- <div>🎬 Discover</div>
+  <div class="logo">MOVIETOK</div>
+  <p>Discover your next movie or TV show</p>
 </header>
 
-<div id="homePage">
-
- <div class="hero">
-  <h1>Discover Your Next Movie or Series.</h1>
-  <p>Hollywood, Bollywood, Tollywood, TV series and more.</p>
+<main>
 
   <div class="search">
-   <input id="searchInput" placeholder="Search movies or TV series...">
-   <button onclick="searchMovies()">Search</button>
-  </div>
- </div>
-
- <section>
-  <h2 id="sectionTitle">Popular Movies & TV Shows</h2>
-  <p class="status" id="status">Loading...</p>
-  <div class="movies" id="movieList"></div>
- </section>
-
-</div>
-
-<div id="detailsPage">
- <section>
-
-  <button class="back-button" onclick="goBack()">← Back</button>
-
-  <img id="backdrop" class="backdrop" alt="Backdrop">
-
-  <h1 class="details-title" id="detailTitle"></h1>
-  <p class="details-meta" id="detailMeta"></p>
-
-  <div id="detailGenres"></div>
-
-  <div class="info-grid" id="infoGrid">
-
-   <div class="info-box">
-    <small id="directorLabel">Director</small>
-    <strong id="director">Unknown</strong>
-   </div>
-
-   <div class="info-box">
-    <small id="runtimeLabel">Runtime</small>
-    <strong id="runtime">Unknown</strong>
-   </div>
-
-   <div class="info-box">
-    <small>Language</small>
-    <strong id="language">Unknown</strong>
-   </div>
-
-   <div class="info-box">
-    <small>Status</small>
-    <strong id="movieStatus">Unknown</strong>
-   </div>
-
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search movies or TV series..."
+    >
+    <button onclick="searchMovies()">Search</button>
   </div>
 
-  <h3>Overview</h3>
-  <p class="overview" id="detailOverview"></p>
+  <section>
+    <h2>Browse by Genre</h2>
 
-  <h3>Main Cast</h3>
-  <div class="cast-grid" id="castList"></div>
+    <div class="genre-buttons">
+      <button onclick="searchGenre('Action', 28, 10759)">Action</button>
+      <button onclick="searchGenre('Comedy', 35, 35)">Comedy</button>
+      <button onclick="searchGenre('Romance', 10749, '')">Romance</button>
+      <button onclick="searchGenre('Horror', 27, '')">Horror</button>
+      <button onclick="searchGenre('Thriller', 53, '')">Thriller</button>
+      <button onclick="searchGenre('Sci-Fi', 878, 10765)">Sci-Fi</button>
+      <button onclick="searchGenre('Animation', 16, 16)">Animation</button>
+      <button onclick="searchGenre('Drama', 18, 18)">Drama</button>
+    </div>
+  </section>
 
-  <h3>Official Trailer</h3>
-  <div id="trailerContainer"></div>
+  <section>
+    <h2 id="sectionTitle">Popular Movies & TV Shows</h2>
+    <p class="status" id="status">Loading...</p>
+    <div class="movies" id="movieList"></div>
+  </section>
 
- </section>
-</div>
+  <section class="details" id="details"></section>
+
+</main>
 
 <script>
-const list = document.getElementById("movieList");
+const API = "/api/movies";
+
+const movieList = document.getElementById("movieList");
 const statusText = document.getElementById("status");
-const homePage = document.getElementById("homePage");
-const detailsPage = document.getElementById("detailsPage");
+const sectionTitle = document.getElementById("sectionTitle");
+const detailsBox = document.getElementById("details");
+const searchInput = document.getElementById("searchInput");
 
-async function loadMovies(query = "") {
- statusText.textContent = "Loading movies and TV shows...";
- list.replaceChildren();
-
- try {
-  const endpoint = query
-   ? `/api/movies?query=${encodeURIComponent(query)}`
-   : "/api/movies";
-
-  const response = await fetch(endpoint);
-  if (!response.ok) throw new Error("Search failed");
-
-  const data = await response.json();
-
-  if (!data.results || data.results.length === 0) {
-   statusText.textContent = "No movies or TV shows found.";
-   return;
-  }
-
-  statusText.textContent = "";
-
-  data.results.forEach(item => {
-   const card = document.createElement("div");
-   card.className = "movie";
-
-   const isTV = item.media_type === "tv";
-
-   const poster = document.createElement("img");
-   poster.className = "poster";
-   poster.alt = (item.title || item.name || "Poster");
-   poster.src = item.poster_path
-    ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
-    : "";
-
-   const info = document.createElement("div");
-   info.className = "movie-info";
-
-   const title = document.createElement("h3");
-   title.textContent = item.title || item.name || "Untitled";
-
-   const rating = document.createElement("p");
-   rating.textContent =
-    `⭐ ${Number(item.vote_average || 0).toFixed(1)}/10`;
-
-   const type = document.createElement("p");
-   type.style.color = "#aaa";
-   type.textContent = isTV ? "📺 TV Series" : "🎬 Movie";
-
-   info.append(title, rating, type);
-   card.append(poster, info);
-
-   card.addEventListener("click", () =>
-    showDetails(item.id, item.media_type || "movie")
-   );
-
-   list.appendChild(card);
-  });
-
- } catch (error) {
-  statusText.textContent = "Unable to load results. Please try again.";
-  console.error(error);
- }
+function getTitle(item) {
+  return item.title || item.name || "Untitled";
 }
 
-async function showDetails(id, type = "movie") {
- homePage.style.display = "none";
- detailsPage.style.display = "block";
- window.scrollTo(0, 0);
+function getDate(item) {
+  return item.release_date || item.first_air_date || "";
+}
 
- const title = document.getElementById("detailTitle");
- const meta = document.getElementById("detailMeta");
- const overview = document.getElementById("detailOverview");
- const backdrop = document.getElementById("backdrop");
- const genres = document.getElementById("detailGenres");
- const castList = document.getElementById("castList");
- const trailerContainer = document.getElementById("trailerContainer");
+function getImage(path) {
+  return path
+    ? `https://image.tmdb.org/t/p/w500${path}`
+    : "https://placehold.co/500x750/20202a/ffffff?text=No+Poster";
+}
 
- title.textContent = "Loading...";
- meta.textContent = "";
- overview.textContent = "";
- genres.replaceChildren();
- castList.replaceChildren();
- trailerContainer.replaceChildren();
- backdrop.style.display = "none";
+async function loadMovies(url, title) {
+  movieList.innerHTML = "";
+  detailsBox.style.display = "none";
+  statusText.textContent = "Loading...";
+  sectionTitle.textContent = title;
 
- try {
-  const response = await fetch(
-   `/api/movies?id=${encodeURIComponent(id)}&type=${encodeURIComponent(type)}`
-  );
+  try {
+    const response = await fetch(url);
 
-  if (!response.ok) throw new Error("Details unavailable");
+    if (!response.ok) {
+      throw new Error("Could not load results.");
+    }
 
-  const item = await response.json();
-  const isTV = type === "tv";
+    const data = await response.json();
+    const results = data.results || [];
 
-  title.textContent = item.title || item.name || "Unknown title";
+    if (!results.length) {
+      statusText.textContent = "No results found. Try another search.";
+      return;
+    }
 
-  const date = isTV ? item.first_air_date : item.release_date;
+    statusText.textContent = `${results.length} results found`;
 
-  meta.textContent =
-   `⭐ ${Number(item.vote_average || 0).toFixed(1)}/10` +
-   ` | ${isTV ? "First aired" : "Released"}: ${date || "Unknown"}` +
-   ` | ${isTV ? "TV Series" : "Movie"}`;
+    results.forEach(item => {
+      const type = item.media_type ||
+        (item.first_air_date ? "tv" : "movie");
 
-  overview.textContent = item.overview || "No overview available.";
+      const card = document.createElement("div");
+      card.className = "movie-card";
 
-  if (item.backdrop_path) {
-   backdrop.src = `https://image.tmdb.org/t/p/w1280${item.backdrop_path}`;
-   backdrop.style.display = "block";
+      const image = document.createElement("img");
+      image.src = getImage(item.poster_path);
+      image.alt = getTitle(item);
+      image.loading = "lazy";
+
+      const info = document.createElement("div");
+      info.className = "movie-info";
+
+      const name = document.createElement("h3");
+      name.textContent = getTitle(item);
+
+      const rating = document.createElement("div");
+      rating.className = "rating";
+      rating.textContent = `★ ${Number(item.vote_average || 0).toFixed(1)} / 10`;
+
+      const media = document.createElement("div");
+      media.className = "media-type";
+      media.textContent = type === "tv" ? "TV SERIES" : "MOVIE";
+
+      info.append(name, rating, media);
+      card.append(image, info);
+
+      card.addEventListener("click", () => {
+        showDetails(item.id, type);
+      });
+
+      movieList.appendChild(card);
+    });
+
+  } catch (error) {
+    statusText.textContent = "Something went wrong. Please try again.";
+    console.error(error);
   }
-
-  (item.genres || []).forEach(genre => {
-   const tag = document.createElement("span");
-   tag.className = "genre";
-   tag.textContent = genre.name;
-   genres.appendChild(tag);
-  });
-
-  const creator = isTV
-   ? (item.created_by || []).map(person => person.name).join(", ")
-   : (item.credits?.crew || [])
-      .find(person => person.job === "Director")?.name;
-
-  document.getElementById("directorLabel").textContent =
-   isTV ? "Creator" : "Director";
-
-  document.getElementById("director").textContent =
-   creator || "Unknown";
-
-  const runtime = isTV
-   ? item.episode_run_time?.[0]
-   : item.runtime;
-
-  document.getElementById("runtimeLabel").textContent =
-   isTV ? "Episode Runtime" : "Runtime";
-
-  document.getElementById("runtime").textContent =
-   runtime ? `${runtime} minutes` : "Unknown";
-
-  document.getElementById("language").textContent =
-   item.original_language?.toUpperCase() || "Unknown";
-
-  document.getElementById("movieStatus").textContent =
-   item.status || "Unknown";
-
-  if (isTV) {
-   [
-    ["Seasons", item.number_of_seasons],
-    ["Episodes", item.number_of_episodes]
-   ].forEach(([label, value]) => {
-    const box = document.createElement("div");
-    box.className = "info-box";
-
-    const small = document.createElement("small");
-    small.textContent = label;
-
-    const strong = document.createElement("strong");
-    strong.textContent = value ?? "Unknown";
-
-    box.append(small, strong);
-    document.getElementById("infoGrid").appendChild(box);
-   });
-  }
-
-  (item.credits?.cast || []).slice(0, 12).forEach(person => {
-   const card = document.createElement("div");
-   card.className = "cast-card";
-
-   const photo = document.createElement("img");
-   photo.alt = person.name || "Cast member";
-   photo.loading = "lazy";
-   photo.src = person.profile_path
-    ? `https://image.tmdb.org/t/p/w185${person.profile_path}`
-    : "";
-
-   const name = document.createElement("p");
-   name.textContent = person.name || "Unknown";
-
-   const character = document.createElement("p");
-   character.textContent = person.character || "";
-
-   card.append(photo, name, character);
-   castList.appendChild(card);
-  });
-
-  const trailer = (item.videos?.results || []).find(video =>
-   video.site === "YouTube" &&
-   video.type === "Trailer" &&
-   video.key
-  );
-
-  if (trailer) {
-   const frame = document.createElement("iframe");
-   frame.className = "trailer";
-   frame.src =
-    `https://www.youtube-nocookie.com/embed/${encodeURIComponent(trailer.key)}`;
-   frame.title = isTV ? "TV series trailer" : "Movie trailer";
-   frame.allowFullscreen = true;
-   frame.referrerPolicy = "strict-origin-when-cross-origin";
-   trailerContainer.appendChild(frame);
-  } else {
-   trailerContainer.textContent = "No trailer available.";
-  }
-
- } catch (error) {
-  title.textContent = "Unable to load details.";
-  console.error(error);
- }
 }
 
 function searchMovies() {
- const query = document.getElementById("searchInput").value.trim();
+  const query = searchInput.value.trim();
 
- if (!query) {
-  document.getElementById("sectionTitle").textContent =
-   "Popular Movies & TV Shows";
-  loadMovies();
-  return;
- }
+  if (!query) {
+    statusText.textContent = "Please enter a movie or TV series name.";
+    return;
+  }
 
- document.getElementById("sectionTitle").textContent =
-  `Results for "${query}"`;
+  loadMovies(
+    `${API}?query=${encodeURIComponent(query)}`,
+    `Search results for: ${query}`
+  );
+}
 
- loadMovies(query);
+function searchGenre(name, movieGenre, tvGenre) {
+  const params = new URLSearchParams();
+
+  if (movieGenre) {
+    params.set("movieGenre", movieGenre);
+  }
+
+  if (tvGenre) {
+    params.set("tvGenre", tvGenre);
+  }
+
+  searchInput.value = "";
+
+  loadMovies(
+    `${API}?${params.toString()}`,
+    `${name} Movies & TV Shows`
+  );
+}
+
+async function showDetails(id, type) {
+  detailsBox.style.display = "block";
+  detailsBox.innerHTML = "<p>Loading details...</p>";
+
+  detailsBox.scrollIntoView({ behavior: "smooth" });
+
+  try {
+    const response = await fetch(
+      `${API}?id=${encodeURIComponent(id)}&type=${encodeURIComponent(type)}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Could not load details.");
+    }
+
+    const item = await response.json();
+
+    const title = getTitle(item);
+    const overview = item.overview || "No description available.";
+    const date = getDate(item) || "Unknown";
+    const rating = Number(item.vote_average || 0).toFixed(1);
+    const genres = (item.genres || [])
+      .map(genre => genre.name)
+      .join(", ") || "Not available";
+
+    const isTV = type === "tv";
+
+    const runtime = isTV
+      ? (item.episode_run_time || []).join(", ")
+      : item.runtime;
+
+    const cast = item.credits?.cast || [];
+    const castNames = cast
+      .slice(0, 10)
+      .map(person => person.name)
+      .join(", ");
+
+    const crew = item.credits?.crew || [];
+
+    const director = isTV
+      ? (item.created_by || []).map(person => person.name).join(", ")
+      : crew
+          .filter(person => person.job === "Director")
+          .map(person => person.name)
+          .join(", ");
+
+    const trailer = (item.videos?.results || []).find(video =>
+      video.site === "YouTube" &&
+      (video.type === "Trailer" || video.type === "Teaser")
+    );
+
+    detailsBox.innerHTML = `
+      <button class="back-button" onclick="goBack()">← Back to results</button>
+
+      <div class="detail-top">
+        <img src="${getImage(item.poster_path)}" alt="Poster">
+
+        <div class="detail-text">
+          <h2>${escapeHTML(title)}</h2>
+
+          <p>★ ${rating} / 10</p>
+          <p><strong>Type:</strong> ${isTV ? "TV Series" : "Movie"}</p>
+          <p><strong>Release:</strong> ${escapeHTML(date)}</p>
+          <p><strong>Genres:</strong> ${escapeHTML(genres)}</p>
+          <p><strong>${isTV ? "Creators" : "Director"}:</strong> ${escapeHTML(director || "Not available")}</p>
+          <p><strong>${isTV ? "Episode runtime" : "Runtime"}:</strong> ${runtime ? escapeHTML(String(runtime)) + " minutes" : "Not available"}</p>
+
+          ${isTV ? `
+            <p><strong>Seasons:</strong> ${item.number_of_seasons ?? "Not available"}</p>
+            <p><strong>Episodes:</strong> ${item.number_of_episodes ?? "Not available"}</p>
+            <p><strong>Status:</strong> ${escapeHTML(item.status || "Not available")}</p>
+          ` : ""}
+        </div>
+      </div>
+
+      <h3>Overview</h3>
+      <p>${escapeHTML(overview)}</p>
+
+      <h3>Cast</h3>
+      <p class="cast-list">${escapeHTML(castNames || "Cast information unavailable.")}</p>
+
+      ${trailer ? `
+        <h3>Trailer</h3>
+        <iframe
+          class="trailer"
+          src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(trailer.key)}"
+          title="YouTube trailer"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      ` : "<p>No trailer available.</p>"}
+    `;
+
+  } catch (error) {
+    detailsBox.innerHTML =
+      '<p>Unable to load details. Please try again.</p>';
+    console.error(error);
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
 }
 
 function goBack() {
- detailsPage.style.display = "none";
- homePage.style.display = "block";
-
- document.querySelectorAll("#infoGrid .info-box")
-  .forEach((box, index) => {
-   if (index > 3) box.remove();
-  });
-
- document.getElementById("directorLabel").textContent = "Director";
- document.getElementById("runtimeLabel").textContent = "Runtime";
-
- window.scrollTo(0, 0);
+  detailsBox.style.display = "none";
+  detailsBox.innerHTML = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-document.getElementById("searchInput")
- .addEventListener("keydown", event => {
-  if (event.key === "Enter") searchMovies();
- });
+searchInput.addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    searchMovies();
+  }
+});
 
-loadMovies();
+loadMovies(API, "Popular Movies & TV Shows");
 </script>
 
 </body>
