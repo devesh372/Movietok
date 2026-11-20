@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | MOVIETOK</title>
+  <style>
+    body {
+      background: #101014;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      line-height: 1.7;
+      padding: 25px;
+      max-width: 850px;
+      margin: auto;
+    }
+    h1, h2 { color: #ff3155; }
+    a { color: #ff3155; }
+  </style>
+</head>
+<body>
 
+<h1>Privacy Policy</h1>
+<p>Last updated: November 20, 2026</p>
+
+<p>Welcome to MOVIETOK. This Privacy Policy explains how information may be handled when you visit our website.</p>
+
+<h2>Information We Collect</h2>
+<p>MOVIETOK may receive technical information such as browser type, device information, and website usage data through hosting, security, or analytics services, if enabled.</p>
+
+<h2>Cookies and Advertising</h2>
+<p>MOVIETOK may use cookies or similar technologies for website functionality, analytics, and advertising. If advertising services such as Google AdSense are added, their technologies may collect information according to their own privacy policies and applicable requirements.</p>
+
+<h2>Third-Party Services</h2>
+<p>MOVIETOK uses third-party services for movie information and website hosting. Those services may process information under their own privacy policies.</p>
+
+<h2>Children's Privacy</h2>
+<p>We do not knowingly collect personal information from children. If you believe personal information has been submitted to us, please contact us so we can review the concern.</p>
+
+<h2>External Links</h2>
+<p>Our website may contain links to third-party websites. We are not responsible for their privacy practices or content.</p>
+
+<h2>Changes to This Policy</h2>
+<p>We may update this Privacy Policy when our website or services change. Updates will be posted on this page.</p>
+
+<h2>Contact Us</h2>
+<p>For privacy-related questions, contact us through our <a href="contact.html">Contact Us</a> page.</p>
+
+<p><a href="index.html">Back to MOVIETOK</a></p>
+
+</body>
+</html>
