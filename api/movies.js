@@ -1,42 +1,40 @@
 
 export default async function handler(req, res) {
+  const token = process.env.TMDB_ACCESS_TOKEN;
+
+  if (!token) {
+    return res.status(500).json({
+      error: "TMDB API token is missing."
+    });
+  }
+
+  const { query, id, type, movieGenre, tvGenre } = req.query;
+
+  const headers = {
+    accept: "application/json",
+    Authorization: `Bearer ${token}`
+  };
+
+  async function tmdb(path) {
+    const response = await fetch(
+      `https://api.themoviedb.org/3${path}`,
+      { headers }
+    );
+
+    if (!response.ok) {
+      throw new Error(`TMDB error: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
   try {
-    const token = process.env.TMDB_ACCESS_TOKEN;
-
-    if (!token) {
-      return res.status(500).json({ error: "TMDB token missing" });
-    }
-
-    const { query, id, type } = req.query;
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      accept: "application/json"
-    };
-
-    async function tmdb(path) {
-      const response = await fetch(
-        `https://api.themoviedb.org/3${path}`,
-        { headers }
-      );
-
-      if (!response.ok) {
-        throw new Error("TMDB request failed");
-      }
-
-      return response.json();
-    }
-
-    // Fetch details
+    // MOVIE OR TV DETAILS
     if (id) {
       const mediaType = type === "tv" ? "tv" : "movie";
 
-      const append = mediaType === "tv"
-        ? "credits,videos,keywords"
-        : "credits,videos,keywords,release_dates,external_ids";
-
       const details = await tmdb(
-        `/${mediaType}/${encodeURIComponent(id)}?append_to_response=${append}`
+        `/${mediaType}/${encodeURIComponent(id)}?append_to_response=credits,videos,keywords,release_dates,external_ids`
       );
 
       return res.status(200).json({
@@ -45,51 +43,87 @@ export default async function handler(req, res) {
       });
     }
 
-    // Trending movies and TV shows
-    if (!query || !query.trim()) {
-      const data = await tmdb("/trending/all/week");
+    // SEARCH BY GENRE
+    if (movieGenre || tvGenre) {
+      const requests = [];
+
+      if (movieGenre) {
+        requests.push(
+          tmdb(
+            `/discover/movie?with_genres=${encodeURIComponent(movieGenre)}&sort_by=popularity.desc&include_adult=false&language=en-US&page=1`
+          ).then(data =>
+            data.results.map(item => ({
+              ...item,
+              media_type: "movie"
+            }))
+          )
+        );
+      }
+
+      if (tvGenre) {
+        requests.push(
+          tmdb(
+            `/discover/tv?with_genres=${encodeURIComponent(tvGenre)}&sort_by=popularity.desc&language=en-US&page=1`
+          ).then(data =>
+            data.results.map(item => ({
+              ...item,
+              media_type: "tv"
+            }))
+          )
+        );
+      }
+
+      const results = (await Promise.all(requests))
+        .flat()
+        .sort((a, b) => b.popularity - a.popularity);
 
       return res.status(200).json({
-        ...data,
-        results: (data.results || []).filter(
-          item => item.media_type === "movie" || item.media_type === "tv"
-        )
+        results,
+        total_results: results.length
       });
     }
 
-    // Search movies and TV shows
-    const search = encodeURIComponent(query.trim());
+    // SEARCH MOVIES AND TV SERIES
+    if (query) {
+      const encodedQuery = encodeURIComponent(query);
 
-    const [movies, shows] = await Promise.all([
-      tmdb(`/search/movie?query=${search}&include_adult=false&language=en-US`),
-      tmdb(`/search/tv?query=${search}&include_adult=false&language=en-US`)
-    ]);
+      const [movies, shows] = await Promise.all([
+        tmdb(
+          `/search/movie?query=${encodedQuery}&include_adult=false&language=en-US&page=1`
+        ),
+        tmdb(
+          `/search/tv?query=${encodedQuery}&language=en-US&page=1`
+        )
+      ]);
 
-    const results = [
-      ...(movies.results || []).map(item => ({
-        ...item,
-        media_type: "movie"
-      })),
-      ...(shows.results || []).map(item => ({
-        ...item,
-        media_type: "tv"
-      }))
-    ].sort((a, b) =>
-      (b.popularity || 0) - (a.popularity || 0)
+      const results = [
+        ...movies.results.map(item => ({
+          ...item,
+          media_type: "movie"
+        })),
+        ...shows.results.map(item => ({
+          ...item,
+          media_type: "tv"
+        }))
+      ].sort((a, b) => b.popularity - a.popularity);
+
+      return res.status(200).json({
+        results,
+        total_results: results.length
+      });
+    }
+
+    // TRENDING MOVIES AND TV SERIES
+    const trending = await tmdb(
+      "/trending/all/week?language=en-US"
     );
 
-    return res.status(200).json({
-      page: 1,
-      results,
-      total_results: results.length,
-      total_pages: 1
-    });
+    return res.status(200).json(trending);
 
   } catch (error) {
-    console.error(error);
-
     return res.status(500).json({
-      error: "Something went wrong"
+      error: "Unable to fetch data from TMDB.",
+      details: error.message
     });
   }
 }
