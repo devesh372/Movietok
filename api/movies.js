@@ -8,7 +8,18 @@ export default async function handler(req, res) {
     });
   }
 
-  const { query, id, type, movieGenre, tvGenre } = req.query;
+  const {
+    query,
+    id,
+    type,
+    movieGenre,
+    tvGenre
+  } = req.query;
+
+  const page = Math.min(
+    500,
+    Math.max(1, parseInt(req.query.page, 10) || 1)
+  );
 
   const headers = {
     accept: "application/json",
@@ -50,36 +61,49 @@ export default async function handler(req, res) {
       if (movieGenre) {
         requests.push(
           tmdb(
-            `/discover/movie?with_genres=${encodeURIComponent(movieGenre)}&sort_by=popularity.desc&include_adult=false&language=en-US&page=1`
-          ).then(data =>
-            data.results.map(item => ({
+            `/discover/movie?with_genres=${encodeURIComponent(movieGenre)}&sort_by=popularity.desc&include_adult=false&language=en-US&page=${page}`
+          ).then(data => ({
+            results: data.results.map(item => ({
               ...item,
               media_type: "movie"
-            }))
-          )
+            })),
+            total_pages: data.total_pages || 1,
+            total_results: data.total_results || 0
+          }))
         );
       }
 
       if (tvGenre) {
         requests.push(
           tmdb(
-            `/discover/tv?with_genres=${encodeURIComponent(tvGenre)}&sort_by=popularity.desc&language=en-US&page=1`
-          ).then(data =>
-            data.results.map(item => ({
+            `/discover/tv?with_genres=${encodeURIComponent(tvGenre)}&sort_by=popularity.desc&language=en-US&page=${page}`
+          ).then(data => ({
+            results: data.results.map(item => ({
               ...item,
               media_type: "tv"
-            }))
-          )
+            })),
+            total_pages: data.total_pages || 1,
+            total_results: data.total_results || 0
+          }))
         );
       }
 
-      const results = (await Promise.all(requests))
-        .flat()
+      const data = await Promise.all(requests);
+
+      const results = data
+        .flatMap(item => item.results)
         .sort((a, b) => b.popularity - a.popularity);
 
       return res.status(200).json({
+        page,
         results,
-        total_results: results.length
+        total_pages: Math.max(
+          ...data.map(item => item.total_pages)
+        ),
+        total_results: data.reduce(
+          (sum, item) => sum + item.total_results,
+          0
+        )
       });
     }
 
@@ -89,10 +113,10 @@ export default async function handler(req, res) {
 
       const [movies, shows] = await Promise.all([
         tmdb(
-          `/search/movie?query=${encodedQuery}&include_adult=false&language=en-US&page=1`
+          `/search/movie?query=${encodedQuery}&include_adult=false&language=en-US&page=${page}`
         ),
         tmdb(
-          `/search/tv?query=${encodedQuery}&language=en-US&page=1`
+          `/search/tv?query=${encodedQuery}&language=en-US&page=${page}`
         )
       ]);
 
@@ -108,14 +132,21 @@ export default async function handler(req, res) {
       ].sort((a, b) => b.popularity - a.popularity);
 
       return res.status(200).json({
+        page,
         results,
-        total_results: results.length
+        total_pages: Math.max(
+          movies.total_pages || 1,
+          shows.total_pages || 1
+        ),
+        total_results:
+          (movies.total_results || 0) +
+          (shows.total_results || 0)
       });
     }
 
     // TRENDING MOVIES AND TV SERIES
     const trending = await tmdb(
-      "/trending/all/week?language=en-US"
+      `/trending/all/week?language=en-US&page=${page}`
     );
 
     return res.status(200).json(trending);
