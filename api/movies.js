@@ -29,6 +29,7 @@ export default async function handler(req, res) {
       return response.json();
     }
 
+    // Movie details
     if (id) {
       const movie = await tmdb(
         `/movie/${encodeURIComponent(id)}` +
@@ -38,23 +39,22 @@ export default async function handler(req, res) {
       return res.status(200).json(movie);
     }
 
+    // Trending movies
     if (!query || !query.trim()) {
-      const data = await tmdb("/trending/movie/week");
-      return res.status(200).json(data);
+      return res.status(200).json(
+        await tmdb("/trending/movie/week")
+      );
     }
 
-    const searchQuery = query.trim();
+    const search = query.trim();
 
+    // Search the entered spelling
     const exact = await tmdb(
-      `/search/movie?query=${encodeURIComponent(searchQuery)}` +
+      `/search/movie?query=${encodeURIComponent(search)}` +
       "&include_adult=false&language=en-US"
     );
 
-    if (exact.results?.length) {
-      return res.status(200).json(exact);
-    }
-
-    // Check popular and trending movies for close title matches.
+    // Also search popular and trending movies
     const pages = await Promise.all([
       tmdb("/movie/popular?page=1"),
       tmdb("/movie/popular?page=2"),
@@ -62,7 +62,17 @@ export default async function handler(req, res) {
       tmdb("/trending/movie/week")
     ]);
 
-    const movies = pages.flatMap(page => page.results || []);
+    const allMovies = [
+      ...(exact.results || []),
+      ...pages.flatMap(page => page.results || [])
+    ];
+
+    // Remove duplicate movies
+    const uniqueMovies = [
+      ...new Map(
+        allMovies.map(movie => [movie.id, movie])
+      ).values()
+    ];
 
     function normalize(value) {
       return value
@@ -70,6 +80,7 @@ export default async function handler(req, res) {
         .replace(/[^a-z0-9]/g, "");
     }
 
+    // Calculate spelling difference
     function distance(a, b) {
       const row = Array.from(
         { length: b.length + 1 },
@@ -96,22 +107,38 @@ export default async function handler(req, res) {
       return row[b.length];
     }
 
-    const wanted = normalize(searchQuery);
+    const wanted = normalize(search);
 
-    const matches = movies
+    // Rank spelling similarity and movie popularity
+    const ranked = uniqueMovies
       .filter(movie => movie.title)
-      .map(movie => ({
-        movie,
-        score: distance(wanted, normalize(movie.title))
-      }))
-      .filter(item =>
-        item.score <= Math.max(2, Math.floor(wanted.length * 0.25))
-      )
-      .sort((a, b) => a.score - b.score);
+      .map(movie => {
+        const title = normalize(movie.title);
+        const maxLength = Math.max(wanted.length, title.length);
+
+        const similarity = maxLength
+          ? 1 - distance(wanted, title) / maxLength
+          : 0;
+
+        const popularityBonus =
+          Math.min(Math.log10((movie.popularity || 0) + 1) / 4, 1) * 0.25;
+
+        const votesBonus =
+          Math.min(Math.log10((movie.vote_count || 0) + 1) / 5, 1) * 0.10;
+
+        return {
+          movie,
+          score: similarity + popularityBonus + votesBonus
+        };
+      })
+      .filter(item => item.score >= 0.55)
+      .sort((a, b) => b.score - a.score);
 
     return res.status(200).json({
-      results: matches.map(item => item.movie),
-      total_results: matches.length
+      page: 1,
+      results: ranked.slice(0, 20).map(item => item.movie),
+      total_results: ranked.length,
+      total_pages: 1
     });
 
   } catch (error) {
