@@ -5,62 +5,222 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MOVIETOK | Discover Movies</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0d0d12;color:white;font-family:Arial,sans-serif}
-header{padding:20px;background:#17171f;display:flex;justify-content:space-between}
-.logo{color:#ff3155;font-size:27px;font-weight:bold}
-.hero{padding:45px 20px;text-align:center;background:linear-gradient(120deg,#46142c,#171727)}
-.search{display:flex;max-width:500px;margin:25px auto}
-input{flex:1;min-width:0;padding:14px;border:0;border-radius:8px 0 0 8px}
-button{padding:12px;background:#ff3155;color:white;border:0;border-radius:5px}
-.search button{border-radius:0 8px 8px 0}
+
+body{
+ margin:0;
+ background:#0d0d12;
+ color:white;
+ font-family:Arial,sans-serif;
+}
+
+header{
+ padding:20px;
+ background:#17171f;
+ display:flex;
+ justify-content:space-between;
+}
+
+.logo{
+ color:#ff3155;
+ font-size:27px;
+ font-weight:bold;
+}
+
+.hero{
+ padding:45px 20px;
+ text-align:center;
+ background:linear-gradient(120deg,#46142c,#171727);
+}
+
+.search{
+ display:flex;
+ max-width:500px;
+ margin:25px auto;
+}
+
+input{
+ flex:1;
+ min-width:0;
+ padding:14px;
+ border:0;
+ border-radius:8px 0 0 8px;
+}
+
+button{
+ padding:12px;
+ background:#ff3155;
+ color:white;
+ border:0;
+ border-radius:5px;
+ cursor:pointer;
+}
+
+.search button{
+ border-radius:0 8px 8px 0;
+}
+
 section{padding:20px}
-.movies{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.movie{background:#1c1c25;border-radius:10px;overflow:hidden}
-.poster{width:100%;display:block;aspect-ratio:2/3;object-fit:cover}
+
+.movies{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:15px;
+}
+
+.movie{
+ background:#1c1c25;
+ border-radius:10px;
+ overflow:hidden;
+ cursor:pointer;
+ transition:transform .2s;
+}
+
+.movie:hover{transform:scale(1.03)}
+
+.poster{
+ width:100%;
+ display:block;
+ aspect-ratio:2/3;
+ object-fit:cover;
+}
+
 .movie-info{padding:12px}
-.movie h3{font-size:16px;margin:0 0 8px}
-.movie p{color:#ffc44d;font-size:13px}
+
+.movie h3{
+ font-size:16px;
+ margin:0 0 8px;
+}
+
+.movie p{
+ color:#ffc44d;
+ font-size:13px;
+}
+
 .status{color:#aaa}
-@media(min-width:700px){.movies{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+#detailsPage{display:none}
+
+.back-button{
+ background:#292933;
+ font-size:20px;
+ padding:10px 16px;
+ border-radius:50%;
+ margin-bottom:15px;
+}
+
+.backdrop{
+ width:100%;
+ max-height:380px;
+ object-fit:cover;
+ border-radius:12px;
+}
+
+.details-content{padding:15px 5px}
+
+.details-title{
+ font-size:27px;
+ margin:15px 0;
+}
+
+.details-meta{
+ color:#ffc44d;
+ line-height:1.8;
+}
+
+.overview{
+ color:#ccc;
+ line-height:1.7;
+}
+
+.genre{
+ display:inline-block;
+ background:#292933;
+ padding:8px 12px;
+ margin:5px 5px 5px 0;
+ border-radius:20px;
+ font-size:13px;
+}
+
+.hidden{display:none!important}
+
+@media(min-width:700px){
+ .movies{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #detailsPage{max-width:900px;margin:auto}
+}
 </style>
 </head>
+
 <body>
+
 <header>
-<div class="logo">MOVIETOK</div>
-<div>🎬 Discover</div>
+ <div class="logo">MOVIETOK</div>
+ <div>🎬 Discover</div>
 </header>
 
-<div class="hero">
-<h1>Discover Your Next Movie.</h1>
-<p>Find your next favourite story.</p>
-<div class="search">
-<input id="searchInput" placeholder="Search movies...">
-<button onclick="searchMovies()">Search</button>
-</div>
+<div id="homePage">
+
+ <div class="hero">
+  <h1>Discover Your Next Movie.</h1>
+  <p>Find your next favourite story.</p>
+
+  <div class="search">
+   <input id="searchInput" placeholder="Search movies...">
+   <button onclick="searchMovies()">Search</button>
+  </div>
+ </div>
+
+ <section>
+  <h2>Popular Movies</h2>
+  <p class="status" id="status">Loading movies...</p>
+  <div class="movies" id="movieList"></div>
+ </section>
+
 </div>
 
-<section>
-<h2>Popular Movies</h2>
-<p class="status" id="status">Loading movies...</p>
-<div class="movies" id="movieList"></div>
-</section>
+<div id="detailsPage">
+ <section>
+
+  <button class="back-button" onclick="goBack()">←</button>
+
+  <img id="backdrop" class="backdrop" src="" alt="Movie backdrop">
+
+  <div class="details-content">
+   <h1 class="details-title" id="detailTitle"></h1>
+
+   <p class="details-meta" id="detailMeta"></p>
+
+   <div id="detailGenres"></div>
+
+   <h3>Overview</h3>
+   <p class="overview" id="detailOverview"></p>
+  </div>
+
+ </section>
+</div>
 
 <script>
 const list = document.getElementById("movieList");
 const statusText = document.getElementById("status");
 
+const homePage = document.getElementById("homePage");
+const detailsPage = document.getElementById("detailsPage");
+
 async function loadMovies(query = "") {
+
  statusText.textContent = "Loading movies...";
  list.innerHTML = "";
 
  try {
+
   const endpoint = query
    ? `/api/movies?query=${encodeURIComponent(query)}`
    : "/api/movies";
 
   const response = await fetch(endpoint);
+
   if (!response.ok) throw new Error("API request failed");
 
   const data = await response.json();
@@ -73,6 +233,7 @@ async function loadMovies(query = "") {
   statusText.textContent = "";
 
   data.results.forEach(movie => {
+
    const card = document.createElement("div");
    card.className = "movie";
 
@@ -84,20 +245,80 @@ async function loadMovies(query = "") {
     ${poster
       ? `<img class="poster" src="${poster}" alt="Movie poster">`
       : `<div class="poster">🎬</div>`}
+
     <div class="movie-info">
-      <h3></h3>
-      <p>⭐ ${Number(movie.vote_average || 0).toFixed(1)}/10</p>
+     <h3></h3>
+     <p>⭐ ${Number(movie.vote_average || 0).toFixed(1)}/10</p>
     </div>
    `;
 
    card.querySelector("h3").textContent = movie.title;
+
+   card.addEventListener("click", () => {
+    showDetails(movie.id);
+   });
+
    list.appendChild(card);
+
   });
 
  } catch (error) {
   statusText.textContent = "Unable to load movies. Please try again.";
   console.error(error);
  }
+}
+
+async function showDetails(id) {
+
+ homePage.style.display = "none";
+ detailsPage.style.display = "block";
+
+ document.getElementById("detailTitle").textContent = "Loading...";
+ document.getElementById("detailMeta").textContent = "";
+ document.getElementById("detailGenres").innerHTML = "";
+ document.getElementById("detailOverview").textContent = "";
+ document.getElementById("backdrop").style.display = "none";
+
+ try {
+
+  const response = await fetch(`/api/movies?id=${id}`);
+
+  if (!response.ok) throw new Error("Details unavailable");
+
+  const movie = await response.json();
+
+  document.getElementById("detailTitle").textContent = movie.title;
+
+  document.getElementById("detailMeta").textContent =
+   `⭐ ${Number(movie.vote_average || 0).toFixed(1)}/10  |  Release: ${movie.release_date || "Unknown"}`;
+
+  document.getElementById("detailOverview").textContent =
+   movie.overview || "No overview available.";
+
+  if (movie.backdrop_path) {
+   const backdrop = document.getElementById("backdrop");
+   backdrop.src = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
+   backdrop.style.display = "block";
+  }
+
+  const genres = document.getElementById("detailGenres");
+
+  (movie.genres || []).forEach(genre => {
+   const tag = document.createElement("span");
+   tag.className = "genre";
+   tag.textContent = genre.name;
+   genres.appendChild(tag);
+  });
+
+ } catch (error) {
+  document.getElementById("detailTitle").textContent = "Unable to load movie details.";
+  console.error(error);
+ }
+}
+
+function goBack() {
+ detailsPage.style.display = "none";
+ homePage.style.display = "block";
 }
 
 function searchMovies() {
@@ -111,5 +332,6 @@ document.getElementById("searchInput").addEventListener("keydown", event => {
 
 loadMovies();
 </script>
+
 </body>
 </html>
