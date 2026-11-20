@@ -1,1 +1,178 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Privacy Policy | MOVIETOK</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #101010;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  line-height: 1.7;
+}
+
+.container {
+  max-width: 850px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #1c1c1c;
+  border-radius: 12px;
+}
+
+h1 {
+  color: #e50914;
+  text-align: center;
+}
+
+h2 {
+  color: #ff4545;
+  margin-top: 25px;
+}
+
+p, li {
+  color: #ccc;
+}
+
+a {
+  color: #ff4545;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: white;
+  text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a class="back" href="index.html">← Back to Home</a>
+
+<h1>Privacy Policy</h1>
+
+<p>Last updated: November 20, 2026</p>
+
+<p>
+Welcome to MOVIETOK. Your privacy is important to us.
+This Privacy Policy explains how MOVIETOK handles
+information when you visit and use our website.
+</p>
+
+<h2>1. Information We Collect</h2>
+
+<p>
+MOVIETOK does not require visitors to create an account.
+We do not intentionally collect personal information
+such as your name, phone number, or home address.
+</p>
+
+<p>
+However, certain technical information, such as browser
+type, device information, and usage data, may be collected
+automatically by hosting providers or third-party services.
+</p>
+
+<h2>2. Cookies</h2>
+
+<p>
+Our website or third-party services may use cookies
+and similar technologies to improve website functionality,
+understand visitor activity, and provide relevant services.
+</p>
+
+<h2>3. Third-Party Services</h2>
+
+<p>
+MOVIETOK may use third-party services, including
+The Movie Database (TMDB), to display movie and
+TV information.
+</p>
+
+<p>
+These services may collect information according to
+their own privacy policies. We encourage visitors to
+review their respective policies.
+</p>
+
+<h2>4. Advertising</h2>
+
+<p>
+MOVIETOK may display advertisements in the future
+through third-party advertising providers, such as
+Google AdSense.
+</p>
+
+<p>
+Advertising providers may use cookies or similar
+technologies to personalize advertisements and
+measure advertising performance, subject to applicable
+consent and privacy requirements.
+</p>
+
+<h2>5. External Links</h2>
+
+<p>
+Our website may contain links to external websites.
+We are not responsible for the privacy practices
+or content of third-party websites.
+</p>
+
+<h2>6. Children's Privacy</h2>
+
+<p>
+MOVIETOK does not knowingly collect personal
+information from children. If you believe that
+personal information has been provided to us,
+please contact us.
+</p>
+
+<h2>7. Data Security</h2>
+
+<p>
+We take reasonable steps to protect our website
+and its information. However, no online service
+can guarantee complete security.
+</p>
+
+<h2>8. Changes to This Policy</h2>
+
+<p>
+We may update this Privacy Policy from time to time.
+Any changes will be published on this page with
+an updated date.
+</p>
+
+<h2>9. Contact Us</h2>
+
+<p>
+If you have questions about this Privacy Policy,
+you can contact the MOVIETOK website owner.
+</p>
+
+<p>
+Website: MOVIETOK
+</p>
+
+<p style="text-align:center; margin-top:40px;">
+© 2026 MOVIETOK. All rights reserved.
+</p>
+
+</div>
+
+</body>
+</html>
+
