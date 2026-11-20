@@ -9,12 +9,17 @@ export default async function handler(req, res) {
       });
     }
 
-    const query = req.query.query;
-    const category = req.query.category;
+    const { query, id } = req.query;
 
-    const endpoint = query
-      ? `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`
-      : "https://api.themoviedb.org/3/trending/movie/week";
+    let endpoint;
+
+    if (id) {
+      endpoint = `https://api.themoviedb.org/3/movie/${encodeURIComponent(id)}`;
+    } else if (query) {
+      endpoint = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`;
+    } else {
+      endpoint = "https://api.themoviedb.org/3/trending/movie/week";
+    }
 
     const response = await fetch(endpoint, {
       headers: {
