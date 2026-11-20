@@ -7,9 +7,7 @@
 <title>MOVIETOK | Discover Movies</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -32,10 +30,7 @@ header {
   letter-spacing: 2px;
 }
 
-header p {
-  color: #aaa;
-  margin-bottom: 0;
-}
+header p { color: #aaa; margin-bottom: 0; }
 
 main {
   max-width: 1200px;
@@ -43,9 +38,7 @@ main {
   padding: 20px;
 }
 
-h2 {
-  margin-top: 28px;
-}
+h2 { margin-top: 28px; }
 
 .search {
   display: flex;
@@ -90,9 +83,7 @@ h2 {
   cursor: pointer;
 }
 
-.genre-buttons button:hover {
-  background: #ff3155;
-}
+.genre-buttons button:hover { background: #ff3155; }
 
 .movies {
   display: grid;
@@ -108,9 +99,7 @@ h2 {
   transition: transform 0.2s;
 }
 
-.movie-card:hover {
-  transform: translateY(-5px);
-}
+.movie-card:hover { transform: translateY(-5px); }
 
 .movie-card img {
   width: 100%;
@@ -120,19 +109,14 @@ h2 {
   background: #292933;
 }
 
-.movie-info {
-  padding: 12px;
-}
+.movie-info { padding: 12px; }
 
 .movie-info h3 {
   font-size: 15px;
   margin: 0 0 8px;
 }
 
-.rating {
-  color: #ffd166;
-  font-size: 13px;
-}
+.rating { color: #ffd166; font-size: 13px; }
 
 .media-type {
   color: #ff8299;
@@ -140,8 +124,27 @@ h2 {
   margin-top: 7px;
 }
 
-.status {
-  color: #aaa;
+.status { color: #aaa; }
+
+.load-more-wrap {
+  text-align: center;
+  margin: 30px 0;
+}
+
+#loadMore {
+  background: #ff3155;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#loadMore:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .details {
@@ -164,10 +167,7 @@ h2 {
   gap: 20px;
 }
 
-.detail-text {
-  flex: 1;
-  min-width: 200px;
-}
+.detail-text { flex: 1; min-width: 200px; }
 
 .details h2 {
   margin-top: 0;
@@ -197,24 +197,17 @@ h2 {
   border-radius: 10px;
 }
 
-.cast-list {
-  color: #ccc;
-  line-height: 1.8;
-}
+.cast-list { color: #ccc; line-height: 1.8; }
 
 @media (max-width: 500px) {
-  main {
-    padding: 14px;
-  }
+  main { padding: 14px; }
 
   .movies {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
-  .search button {
-    padding: 12px;
-  }
+  .search button { padding: 12px; }
 }
 </style>
 </head>
@@ -256,6 +249,12 @@ h2 {
     <h2 id="sectionTitle">Popular Movies & TV Shows</h2>
     <p class="status" id="status">Loading...</p>
     <div class="movies" id="movieList"></div>
+
+    <div class="load-more-wrap">
+      <button id="loadMore" onclick="loadMore()" hidden>
+        Load More
+      </button>
+    </div>
   </section>
 
   <section class="details" id="details"></section>
@@ -270,6 +269,14 @@ const statusText = document.getElementById("status");
 const sectionTitle = document.getElementById("sectionTitle");
 const detailsBox = document.getElementById("details");
 const searchInput = document.getElementById("searchInput");
+const loadMoreButton = document.getElementById("loadMore");
+
+let currentParams = {};
+let currentPage = 1;
+let totalPages = 1;
+let isLoading = false;
+let requestNumber = 0;
+let shownItems = new Set();
 
 function getTitle(item) {
   return item.title || item.name || "Untitled";
@@ -285,32 +292,77 @@ function getImage(path) {
     : "https://placehold.co/500x750/20202a/ffffff?text=No+Poster";
 }
 
-async function loadMovies(url, title) {
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+function buildURL(params) {
+  const search = new URLSearchParams(params);
+  return `${API}?${search.toString()}`;
+}
+
+function startResults(params, title) {
+  requestNumber++;
+  currentParams = params;
+  currentPage = 0;
+  totalPages = 1;
+  shownItems.clear();
+
   movieList.innerHTML = "";
   detailsBox.style.display = "none";
   statusText.textContent = "Loading...";
   sectionTitle.textContent = title;
+  loadMoreButton.hidden = true;
+
+  loadMore();
+}
+
+async function loadMore() {
+  if (isLoading || currentPage >= totalPages) return;
+
+  isLoading = true;
+  const thisRequest = requestNumber;
+  const nextPage = currentPage + 1;
+
+  loadMoreButton.disabled = true;
+  loadMoreButton.textContent = "Loading...";
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(
+      buildURL({ ...currentParams, page: nextPage })
+    );
 
     if (!response.ok) {
       throw new Error("Could not load results.");
     }
 
     const data = await response.json();
+
+    if (thisRequest !== requestNumber) return;
+
     const results = data.results || [];
 
-    if (!results.length) {
-      statusText.textContent = "No results found. Try another search.";
-      return;
-    }
+    totalPages = Math.min(
+      Number(data.total_pages) || 1,
+      500
+    );
 
-    statusText.textContent = `${results.length} results found`;
+    currentPage = nextPage;
 
     results.forEach(item => {
       const type = item.media_type ||
         (item.first_air_date ? "tv" : "movie");
+
+      const uniqueKey = `${type}-${item.id}`;
+
+      if (shownItems.has(uniqueKey)) return;
+      shownItems.add(uniqueKey);
 
       const card = document.createElement("div");
       card.className = "movie-card";
@@ -328,7 +380,8 @@ async function loadMovies(url, title) {
 
       const rating = document.createElement("div");
       rating.className = "rating";
-      rating.textContent = `★ ${Number(item.vote_average || 0).toFixed(1)} / 10`;
+      rating.textContent =
+        `★ ${Number(item.vote_average || 0).toFixed(1)} / 10`;
 
       const media = document.createElement("div");
       media.className = "media-type";
@@ -344,9 +397,38 @@ async function loadMovies(url, title) {
       movieList.appendChild(card);
     });
 
+    statusText.textContent =
+      `${shownItems.size} results loaded`;
+
+    if (currentPage < totalPages && results.length > 0) {
+      loadMoreButton.hidden = false;
+      loadMoreButton.textContent = "Load More";
+    } else {
+      loadMoreButton.hidden = true;
+    }
+
+    if (shownItems.size === 0) {
+      statusText.textContent = "No results found.";
+    }
+
   } catch (error) {
-    statusText.textContent = "Something went wrong. Please try again.";
-    console.error(error);
+    if (thisRequest === requestNumber) {
+      statusText.textContent =
+        "Something went wrong. Please try again.";
+      console.error(error);
+      loadMoreButton.hidden = false;
+      loadMoreButton.textContent = "Try Again";
+    }
+  } finally {
+    if (thisRequest === requestNumber) {
+      isLoading = false;
+      loadMoreButton.disabled = false;
+
+      if (!loadMoreButton.hidden &&
+          loadMoreButton.textContent === "Loading...") {
+        loadMoreButton.textContent = "Load More";
+      }
+    }
   }
 }
 
@@ -354,31 +436,27 @@ function searchMovies() {
   const query = searchInput.value.trim();
 
   if (!query) {
-    statusText.textContent = "Please enter a movie or TV series name.";
+    statusText.textContent =
+      "Please enter a movie or TV series name.";
     return;
   }
 
-  loadMovies(
-    `${API}?query=${encodeURIComponent(query)}`,
+  startResults(
+    { query },
     `Search results for: ${query}`
   );
 }
 
 function searchGenre(name, movieGenre, tvGenre) {
-  const params = new URLSearchParams();
+  const params = {};
 
-  if (movieGenre) {
-    params.set("movieGenre", movieGenre);
-  }
-
-  if (tvGenre) {
-    params.set("tvGenre", tvGenre);
-  }
+  if (movieGenre) params.movieGenre = movieGenre;
+  if (tvGenre) params.tvGenre = tvGenre;
 
   searchInput.value = "";
 
-  loadMovies(
-    `${API}?${params.toString()}`,
+  startResults(
+    params,
     `${name} Movies & TV Shows`
   );
 }
@@ -386,7 +464,6 @@ function searchGenre(name, movieGenre, tvGenre) {
 async function showDetails(id, type) {
   detailsBox.style.display = "block";
   detailsBox.innerHTML = "<p>Loading details...</p>";
-
   detailsBox.scrollIntoView({ behavior: "smooth" });
 
   try {
@@ -409,25 +486,23 @@ async function showDetails(id, type) {
       .join(", ") || "Not available";
 
     const isTV = type === "tv";
-
     const runtime = isTV
       ? (item.episode_run_time || []).join(", ")
       : item.runtime;
 
     const cast = item.credits?.cast || [];
-    const castNames = cast
-      .slice(0, 10)
+    const castNames = cast.slice(0, 10)
       .map(person => person.name)
       .join(", ");
 
     const crew = item.credits?.crew || [];
 
     const director = isTV
-      ? (item.created_by || []).map(person => person.name).join(", ")
+      ? (item.created_by || [])
+          .map(person => person.name).join(", ")
       : crew
           .filter(person => person.job === "Director")
-          .map(person => person.name)
-          .join(", ");
+          .map(person => person.name).join(", ");
 
     const trailer = (item.videos?.results || []).find(video =>
       video.site === "YouTube" &&
@@ -435,25 +510,31 @@ async function showDetails(id, type) {
     );
 
     detailsBox.innerHTML = `
-      <button class="back-button" onclick="goBack()">← Back to results</button>
+      <button class="back-button" onclick="goBack()">
+        ← Back to results
+      </button>
 
       <div class="detail-top">
         <img src="${getImage(item.poster_path)}" alt="Poster">
 
         <div class="detail-text">
           <h2>${escapeHTML(title)}</h2>
-
           <p>★ ${rating} / 10</p>
           <p><strong>Type:</strong> ${isTV ? "TV Series" : "Movie"}</p>
           <p><strong>Release:</strong> ${escapeHTML(date)}</p>
           <p><strong>Genres:</strong> ${escapeHTML(genres)}</p>
-          <p><strong>${isTV ? "Creators" : "Director"}:</strong> ${escapeHTML(director || "Not available")}</p>
-          <p><strong>${isTV ? "Episode runtime" : "Runtime"}:</strong> ${runtime ? escapeHTML(String(runtime)) + " minutes" : "Not available"}</p>
+          <p><strong>${isTV ? "Creators" : "Director"}:</strong>
+            ${escapeHTML(director || "Not available")}</p>
+          <p><strong>${isTV ? "Episode runtime" : "Runtime"}:</strong>
+            ${runtime ? escapeHTML(String(runtime)) + " minutes" : "Not available"}</p>
 
           ${isTV ? `
-            <p><strong>Seasons:</strong> ${item.number_of_seasons ?? "Not available"}</p>
-            <p><strong>Episodes:</strong> ${item.number_of_episodes ?? "Not available"}</p>
-            <p><strong>Status:</strong> ${escapeHTML(item.status || "Not available")}</p>
+            <p><strong>Seasons:</strong>
+              ${item.number_of_seasons ?? "Not available"}</p>
+            <p><strong>Episodes:</strong>
+              ${item.number_of_episodes ?? "Not available"}</p>
+            <p><strong>Status:</strong>
+              ${escapeHTML(item.status || "Not available")}</p>
           ` : ""}
         </div>
       </div>
@@ -462,7 +543,9 @@ async function showDetails(id, type) {
       <p>${escapeHTML(overview)}</p>
 
       <h3>Cast</h3>
-      <p class="cast-list">${escapeHTML(castNames || "Cast information unavailable.")}</p>
+      <p class="cast-list">
+        ${escapeHTML(castNames || "Cast information unavailable.")}
+      </p>
 
       ${trailer ? `
         <h3>Trailer</h3>
@@ -478,19 +561,9 @@ async function showDetails(id, type) {
 
   } catch (error) {
     detailsBox.innerHTML =
-      '<p>Unable to load details. Please try again.</p>';
+      "<p>Unable to load details. Please try again.</p>";
     console.error(error);
   }
-}
-
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, character => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[character]);
 }
 
 function goBack() {
@@ -500,12 +573,10 @@ function goBack() {
 }
 
 searchInput.addEventListener("keydown", event => {
-  if (event.key === "Enter") {
-    searchMovies();
-  }
+  if (event.key === "Enter") searchMovies();
 });
 
-loadMovies(API, "Popular Movies & TV Shows");
+startResults({}, "Popular Movies & TV Shows");
 </script>
 
 </body>
