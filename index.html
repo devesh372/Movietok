@@ -6,188 +6,110 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MOVIETOK | Discover Movies</title>
 <style>
-* { box-sizing:border-box; }
-body {
- margin:0;
- background:#0d0d12;
- color:white;
- font-family:Arial,sans-serif;
-}
-header {
- padding:20px;
- background:#17171f;
- display:flex;
- justify-content:space-between;
- align-items:center;
-}
-.logo { color:#ff3155;font-size:27px;font-weight:bold; }
-.hero {
- padding:55px 22px;
- background:linear-gradient(120deg,#46142c,#171727);
- text-align:center;
-}
-.hero h1 {font-size:34px;}
-.hero p {color:#ccc;}
-.search {
- display:flex;
- max-width:500px;
- margin:25px auto 0;
-}
-.search input {
- flex:1;
- min-width:0;
- padding:14px;
- border:0;
- border-radius:8px 0 0 8px;
- font-size:15px;
-}
-.search button {
- border:0;
- background:#ff3155;
- color:white;
- padding:14px;
- border-radius:0 8px 8px 0;
-}
-section {padding:22px;}
-.filters {
- display:flex;
- gap:10px;
- overflow-x:auto;
- padding:10px 0 20px;
-}
-.filters button {
- background:#252530;
- color:white;
- border:0;
- padding:10px 17px;
- border-radius:20px;
- white-space:nowrap;
-}
-.filters button.active {background:#ff3155;}
-.movies {
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:15px;
-}
-.movie {
- background:#1c1c25;
- border-radius:10px;
- overflow:hidden;
-}
-.poster {
- height:145px;
- display:grid;
- place-items:center;
- font-size:45px;
- background:linear-gradient(135deg,#642c65,#252b50);
-}
-.movie-info {padding:12px;}
-.movie h3 {margin:0 0 8px;font-size:17px;}
-.movie p {color:#aaa;font-size:13px;margin:5px 0;}
-.rating {color:#ffc44d;}
-footer {text-align:center;padding:25px;color:#888;}
-@media(min-width:700px) {
- .movies {grid-template-columns:repeat(4,minmax(0,1fr));}
-}
+*{box-sizing:border-box}
+body{margin:0;background:#0d0d12;color:white;font-family:Arial,sans-serif}
+header{padding:20px;background:#17171f;display:flex;justify-content:space-between}
+.logo{color:#ff3155;font-size:27px;font-weight:bold}
+.hero{padding:45px 20px;text-align:center;background:linear-gradient(120deg,#46142c,#171727)}
+.search{display:flex;max-width:500px;margin:25px auto}
+input{flex:1;min-width:0;padding:14px;border:0;border-radius:8px 0 0 8px}
+button{padding:12px;background:#ff3155;color:white;border:0;border-radius:5px}
+.search button{border-radius:0 8px 8px 0}
+section{padding:20px}
+.movies{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.movie{background:#1c1c25;border-radius:10px;overflow:hidden}
+.poster{width:100%;display:block;aspect-ratio:2/3;object-fit:cover}
+.movie-info{padding:12px}
+.movie h3{font-size:16px;margin:0 0 8px}
+.movie p{color:#ffc44d;font-size:13px}
+.status{color:#aaa}
+@media(min-width:700px){.movies{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
 <body>
-
 <header>
- <div class="logo">MOVIETOK</div>
- <div>🎬 Discover</div>
+<div class="logo">MOVIETOK</div>
+<div>🎬 Discover</div>
 </header>
 
 <div class="hero">
- <h1>Discover Your Next Movie.</h1>
- <p>Find your next favourite story.</p>
- <div class="search">
-  <input id="searchInput" placeholder="Search movies..." oninput="filterMovies()">
-  <button onclick="filterMovies()">Search</button>
- </div>
+<h1>Discover Your Next Movie.</h1>
+<p>Find your next favourite story.</p>
+<div class="search">
+<input id="searchInput" placeholder="Search movies...">
+<button onclick="searchMovies()">Search</button>
+</div>
 </div>
 
 <section>
- <h2>Explore Genres</h2>
- <div class="filters">
-  <button class="active" onclick="setGenre('All',this)">All</button>
-  <button onclick="setGenre('Action',this)">Action</button>
-  <button onclick="setGenre('Romance',this)">Romance</button>
-  <button onclick="setGenre('Horror',this)">Horror</button>
-  <button onclick="setGenre('Comedy',this)">Comedy</button>
- </div>
-
- <h2>Popular Movies</h2>
- <div class="movies" id="movieList">
-
-  <div class="movie" data-genre="Action">
-   <div class="poster">🎬</div>
-   <div class="movie-info">
-    <h3>Action Movies</h3>
-    <p>Adventure and excitement</p>
-    <p class="rating">⭐ Featured</p>
-   </div>
-  </div>
-
-  <div class="movie" data-genre="Romance">
-   <div class="poster">❤️</div>
-   <div class="movie-info">
-    <h3>Romance Movies</h3>
-    <p>Beautiful love stories</p>
-    <p class="rating">⭐ Featured</p>
-   </div>
-  </div>
-
-  <div class="movie" data-genre="Horror">
-   <div class="poster">👻</div>
-   <div class="movie-info">
-    <h3>Horror Movies</h3>
-    <p>Mystery and suspense</p>
-    <p class="rating">⭐ Featured</p>
-   </div>
-  </div>
-
-  <div class="movie" data-genre="Comedy">
-   <div class="poster">😂</div>
-   <div class="movie-info">
-    <h3>Comedy Movies</h3>
-    <p>Fun and entertainment</p>
-    <p class="rating">⭐ Featured</p>
-   </div>
-  </div>
-
- </div>
- <p id="emptyMessage" style="display:none;color:#aaa;">No matching categories found.</p>
+<h2>Popular Movies</h2>
+<p class="status" id="status">Loading movies...</p>
+<div class="movies" id="movieList"></div>
 </section>
 
-<footer>© 2026 MOVIETOK</footer>
-
 <script>
-let selectedGenre = "All";
+const list = document.getElementById("movieList");
+const statusText = document.getElementById("status");
 
-function filterMovies() {
- const search = document.getElementById("searchInput").value.toLowerCase();
- const movies = document.querySelectorAll(".movie");
- let count = 0;
+async function loadMovies(query = "") {
+ statusText.textContent = "Loading movies...";
+ list.innerHTML = "";
 
- movies.forEach(movie => {
-  const matchesSearch = movie.innerText.toLowerCase().includes(search);
-  const matchesGenre = selectedGenre === "All" || movie.dataset.genre === selectedGenre;
-  const show = matchesSearch && matchesGenre;
-  movie.style.display = show ? "block" : "none";
-  if(show) count++;
- });
+ try {
+  const endpoint = query
+   ? `/api/movies?query=${encodeURIComponent(query)}`
+   : "/api/movies";
 
- document.getElementById("emptyMessage").style.display = count ? "none" : "block";
+  const response = await fetch(endpoint);
+  if (!response.ok) throw new Error("API request failed");
+
+  const data = await response.json();
+
+  if (!data.results || data.results.length === 0) {
+   statusText.textContent = "No movies found.";
+   return;
+  }
+
+  statusText.textContent = "";
+
+  data.results.forEach(movie => {
+   const card = document.createElement("div");
+   card.className = "movie";
+
+   const poster = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : "";
+
+   card.innerHTML = `
+    ${poster
+      ? `<img class="poster" src="${poster}" alt="Movie poster">`
+      : `<div class="poster">🎬</div>`}
+    <div class="movie-info">
+      <h3></h3>
+      <p>⭐ ${Number(movie.vote_average || 0).toFixed(1)}/10</p>
+    </div>
+   `;
+
+   card.querySelector("h3").textContent = movie.title;
+   list.appendChild(card);
+  });
+
+ } catch (error) {
+  statusText.textContent = "Unable to load movies. Please try again.";
+  console.error(error);
+ }
 }
 
-function setGenre(genre,button) {
- selectedGenre = genre;
- document.querySelectorAll(".filters button").forEach(b => b.classList.remove("active"));
- button.classList.add("active");
- filterMovies();
+function searchMovies() {
+ const query = document.getElementById("searchInput").value.trim();
+ loadMovies(query);
 }
+
+document.getElementById("searchInput").addEventListener("keydown", event => {
+ if (event.key === "Enter") searchMovies();
+});
+
+loadMovies();
 </script>
-
 </body>
 </html>
