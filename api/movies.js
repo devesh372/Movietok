@@ -14,11 +14,22 @@ export default async function handler(req, res) {
     let endpoint;
 
     if (id) {
-      endpoint = `https://api.themoviedb.org/3/movie/${encodeURIComponent(id)}`;
+      endpoint =
+        `https://api.themoviedb.org/3/movie/${encodeURIComponent(id)}` +
+        "?append_to_response=credits,videos,keywords,release_dates,external_ids";
+
     } else if (query) {
-      endpoint = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`;
+      const params = new URLSearchParams({
+        query: query,
+        include_adult: "false"
+      });
+
+      endpoint =
+        `https://api.themoviedb.org/3/search/movie?${params.toString()}`;
+
     } else {
-      endpoint = "https://api.themoviedb.org/3/trending/movie/week";
+      endpoint =
+        "https://api.themoviedb.org/3/trending/movie/week";
     }
 
     const response = await fetch(endpoint, {
