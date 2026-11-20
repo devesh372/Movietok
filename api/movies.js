@@ -20,8 +20,9 @@ export default async function handler(req, res) {
 
     } else if (query) {
       const params = new URLSearchParams({
-        query: query,
-        include_adult: "false"
+        query: query.trim(),
+        include_adult: "false",
+        language: "en-US"
       });
 
       endpoint =
