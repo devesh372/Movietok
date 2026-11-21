@@ -5,13 +5,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="google-site-verification" content="Vxq0uiWsTaEqhk7EBwcePxAQO-WQ5Hiug2fdmI58x7c">
-
-<title>MOVIETOK | Discover Movies</title>
-<meta name="description" content="Discover movies and TV shows on MOVIETOK. Explore genres, ratings, cast and trailers.">
+<title>MOVIETOK - Discover Movies & TV Shows</title>
+<meta name="description" content="Discover movies and TV shows with MOVIETOK. Explore, search and find your next favourite.">
+<meta name="theme-color" content="#101014">
 
 <link rel="icon" href="/movietok-favicon-exact.png">
-<meta name="theme-color" content="#101014">
 
 <style>
 * {
@@ -23,11 +21,7 @@
 body {
     background: #101014;
     color: white;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-button, input {
-    font: inherit;
+    font-family: Arial, sans-serif;
 }
 
 header {
@@ -37,8 +31,8 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
     flex-wrap: wrap;
+    gap: 15px;
 }
 
 .brand {
@@ -58,14 +52,15 @@ header {
     letter-spacing: 2px;
 }
 
-.brand span {
+.brand span,
+.accent {
     color: #ff3155;
 }
 
 nav {
     display: flex;
     gap: 20px;
-    align-items: center;
+    flex-wrap: wrap;
 }
 
 nav a {
@@ -79,14 +74,12 @@ nav a:hover {
 }
 
 .hero {
-    min-height: 300px;
-    padding: 70px 7%;
+    min-height: 310px;
+    padding: 65px 7%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background:
-    linear-gradient(90deg, #101014 10%, rgba(16,16,20,.8)),
-    linear-gradient(135deg, #371321, #191920);
+    background: linear-gradient(100deg, #101014, #30121e, #191920);
 }
 
 .hero h2 {
@@ -94,29 +87,25 @@ nav a:hover {
     margin-bottom: 15px;
 }
 
-.hero h2 span {
-    color: #ff3155;
-}
-
 .hero p {
     color: #bbb;
-    max-width: 550px;
     line-height: 1.7;
+    max-width: 550px;
 }
 
-.hero button {
+.primary-btn {
     width: fit-content;
-    margin-top: 24px;
     background: #ff3155;
-    border: none;
-    padding: 13px 25px;
-    border-radius: 5px;
     color: white;
-    font-weight: bold;
+    border: none;
+    padding: 13px 24px;
+    border-radius: 5px;
+    margin-top: 22px;
     cursor: pointer;
+    font-weight: bold;
 }
 
-.hero button:hover {
+.primary-btn:hover {
     background: #d91d40;
 }
 
@@ -126,11 +115,7 @@ nav a:hover {
 
 .section-title {
     font-size: 23px;
-    margin-bottom: 22px;
-}
-
-.section-title span {
-    color: #ff3155;
+    margin-bottom: 20px;
 }
 
 .search-box {
@@ -143,10 +128,10 @@ nav a:hover {
     flex: 1;
     min-width: 0;
     background: #191920;
-    color: white;
     border: 1px solid #333;
     padding: 14px;
     border-radius: 6px;
+    color: white;
     outline: none;
 }
 
@@ -163,48 +148,24 @@ nav a:hover {
     cursor: pointer;
 }
 
-.tabs {
+.tabs, .genres {
     display: flex;
-    gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-
-.tab {
-    background: #191920;
-    color: #ccc;
-    border: 1px solid #333;
-    border-radius: 20px;
-    padding: 9px 18px;
-    cursor: pointer;
-}
-
-.tab.active,
-.tab:hover {
-    background: #ff3155;
-    color: white;
-    border-color: #ff3155;
-}
-
-.genres {
-    display: flex;
     gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
-.genre {
+.tab, .genre {
     background: #191920;
     color: #ddd;
     border: 1px solid #333;
+    padding: 9px 17px;
     border-radius: 20px;
-    padding: 8px 15px;
     cursor: pointer;
-    font-size: 13px;
 }
 
-.genre:hover,
-.genre.active {
+.tab.active, .genre.active,
+.tab:hover, .genre:hover {
     background: #ff3155;
     border-color: #ff3155;
     color: white;
@@ -213,7 +174,7 @@ nav a:hover {
 .movie-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-    gap: 22px;
+    gap: 20px;
 }
 
 .movie-card {
@@ -225,16 +186,15 @@ nav a:hover {
 }
 
 .movie-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 25px #0008;
+    transform: translateY(-5px);
 }
 
 .movie-card img {
-    display: block;
     width: 100%;
     aspect-ratio: 2 / 3;
     object-fit: cover;
-    background: #24242b;
+    display: block;
+    background: #292932;
 }
 
 .movie-info {
@@ -244,71 +204,39 @@ nav a:hover {
 .movie-info h3 {
     font-size: 14px;
     margin-bottom: 8px;
-    line-height: 1.4;
 }
 
 .movie-info p {
     font-size: 12px;
     color: #aaa;
+    margin-top: 5px;
 }
 
 .rating {
     color: #ffc857 !important;
-    margin-top: 7px;
 }
 
 .message {
-    color: #aaa;
-    text-align: center;
-    padding: 45px 10px;
     grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 10px;
+    color: #aaa;
 }
 
 .load-more {
     display: block;
     margin: 30px auto;
-    padding: 12px 25px;
     background: #ff3155;
     color: white;
     border: none;
     border-radius: 5px;
+    padding: 12px 24px;
     cursor: pointer;
 }
 
 .load-more:disabled {
     opacity: .5;
-    cursor: not-allowed;
 }
-
-footer {
-    background: #191920;
-    padding: 35px 6%;
-    text-align: center;
-    border-top: 1px solid #333;
-    margin-top: 30px;
-}
-
-footer h2 {
-    margin-bottom: 10px;
-    letter-spacing: 2px;
-}
-
-footer h2 span {
-    color: #ff3155;
-}
-
-footer p {
-    color: #999;
-    font-size: 13px;
-    line-height: 1.8;
-}
-
-footer a {
-    color: #ff3155;
-    text-decoration: none;
-}
-
-/* Details */
 
 .details {
     display: none;
@@ -318,12 +246,12 @@ footer a {
 
 .back-btn {
     background: #292932;
-    border: none;
     color: white;
-    padding: 10px 18px;
+    border: none;
     border-radius: 5px;
-    margin-bottom: 25px;
+    padding: 10px 18px;
     cursor: pointer;
+    margin-bottom: 25px;
 }
 
 .detail-content {
@@ -336,6 +264,7 @@ footer a {
     width: 240px;
     max-width: 100%;
     border-radius: 9px;
+    object-fit: cover;
 }
 
 .detail-text {
@@ -351,21 +280,54 @@ footer a {
 .detail-text p {
     color: #bbb;
     line-height: 1.8;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .detail-text strong {
     color: white;
 }
 
-.trailer-btn {
-    background: #ff3155;
-    border: none;
+footer {
+    background: #191920;
+    padding: 40px 6%;
+    text-align: center;
+    border-top: 1px solid #333;
+    margin-top: 30px;
+}
+
+footer h2 {
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+footer p {
+    color: #999;
+    font-size: 13px;
+    line-height: 2;
+}
+
+footer a {
+    color: #ff3155;
+    text-decoration: none;
+}
+
+.creator-credit {
+    margin-top: 20px;
     color: white;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+}
+
+.instagram {
+    display: inline-block;
     margin-top: 10px;
+    background: #25232c;
+    border: 1px solid #444;
+    padding: 9px 17px;
+    border-radius: 20px;
+}
+
+.thanks {
+    margin-top: 12px;
+    color: #ff3155;
 }
 
 @media(max-width: 600px) {
@@ -376,12 +338,10 @@ footer a {
 
     nav {
         justify-content: center;
-        width: 100%;
-        gap: 15px;
     }
 
     .hero {
-        padding: 55px 6%;
+        padding: 50px 6%;
     }
 
     .container {
@@ -393,17 +353,8 @@ footer a {
         gap: 13px;
     }
 
-    .movie-card:hover {
-        transform: none;
-    }
-
     .search-box button {
         padding: 0 15px;
-    }
-
-    .detail-content img {
-        width: 100%;
-        max-width: 220px;
     }
 }
 </style>
@@ -415,67 +366,65 @@ footer a {
     <div class="brand">
         <img class="logo-mark"
              src="/movietok-favicon-exact.png"
-             alt="MOVIETOK logo">
+             alt="MOVIETOK M Logo">
         <h1>MOVIE<span>TOK</span></h1>
     </div>
 
     <nav>
-        <a href="#" onclick="goHome(); return false;">Home</a>
-        <a href="#movies" onclick="goHome();">Movies</a>
+        <a href="#" onclick="goHome();return false;">Home</a>
+        <a href="#movies">Movies</a>
         <a href="#movies" onclick="setMedia('tv');">TV Shows</a>
         <a href="#footer">About</a>
     </nav>
 </header>
 
 <section class="hero" id="home">
-    <h2>Discover Your Next <span>Favourite.</span></h2>
+    <h2>Discover Your Next <span class="accent">Favourite.</span></h2>
     <p>
-        Explore movies and TV shows, discover new genres,
-        check ratings and find your next entertainment.
+        Explore movies and television shows.
+        Discover new entertainment and find your next favourite.
     </p>
-
-    <button onclick="document.getElementById('movies').scrollIntoView({behavior:'smooth'})">
-        Explore Movies
+    <button class="primary-btn"
+        onclick="document.getElementById('movies').scrollIntoView({behavior:'smooth'})">
+        Explore Now
     </button>
 </section>
 
 <main class="container" id="movies">
 
-    <h2 class="section-title">Explore <span>MOVIETOK</span></h2>
+    <h2 class="section-title">
+        Explore <span class="accent">MOVIETOK</span>
+    </h2>
 
     <div class="search-box">
-        <input
-            type="search"
-            id="searchInput"
+        <input type="search" id="searchInput"
             placeholder="Search movies and TV shows..."
-            onkeydown="if(event.key==='Enter') searchMovies()"
-        >
+            onkeydown="if(event.key==='Enter')searchMovies()">
         <button onclick="searchMovies()">Search</button>
     </div>
 
     <div class="tabs">
         <button class="tab active" id="movieTab"
-                onclick="setMedia('movie')">Movies</button>
+            onclick="setMedia('movie')">Movies</button>
 
         <button class="tab" id="tvTab"
-                onclick="setMedia('tv')">TV Shows</button>
+            onclick="setMedia('tv')">TV Shows</button>
     </div>
 
-    <h3 class="section-title">Browse <span>Genres</span></h3>
+    <h3 class="section-title">Browse <span class="accent">Genres</span></h3>
 
     <div class="genres" id="genres"></div>
 
     <h3 class="section-title" id="resultTitle">
-        Popular <span>Movies</span>
+        Popular <span class="accent">Movies</span>
     </h3>
 
     <div class="movie-grid" id="movieGrid">
         <div class="message">Loading movies...</div>
     </div>
 
-    <button class="load-more" id="loadMore" onclick="loadMore()">
-        Load More
-    </button>
+    <button class="load-more" id="loadMore"
+        onclick="loadMore()">Load More</button>
 
 </main>
 
@@ -485,97 +434,102 @@ footer a {
 </section>
 
 <footer id="footer">
-    <h2>MOVIE<span>TOK</span></h2>
+
+    <h2>MOVIE<span class="accent">TOK</span></h2>
+
     <p>Discover. Explore. Enjoy.</p>
-    <p>
-        Your destination for discovering movies and TV shows.
+    <p>Your destination for discovering movies and TV shows.</p>
+
+    <div class="creator-credit">
+        <p>Created with passion by</p>
+        <h3>Devesh D.J.</h3>
+    </div>
+
+    <p class="thanks">
+        Special thanks to ChatGPT ❤️
     </p>
-    <p>
+
+    <a class="instagram"
+       href="https://www.instagram.com/devesh_jatale/"
+       target="_blank"
+       rel="noopener noreferrer">
+       Instagram: @devesh_jatale
+    </a>
+
+    <p style="margin-top:22px">
         <a href="/privacy.html">Privacy Policy</a>
         &nbsp; | &nbsp;
         <a href="mailto:contact@movietok.com">Contact</a>
     </p>
+
     <p style="margin-top:15px">
         © <span id="year"></span> MOVIETOK. All rights reserved.
     </p>
+
 </footer>
 
 <script>
 const API = "/api/movies";
-
-const imageBase = "https://image.tmdb.org/t/p/w500";
-const placeholder =
+const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
+const PLACEHOLDER =
     "https://placehold.co/500x750/191920/ffffff?text=MOVIETOK";
 
 let media = "movie";
-let currentPage = 1;
-let currentGenre = null;
-let currentQuery = "";
-let currentMode = "popular";
+let page = 1;
+let genre = null;
+let query = "";
+let mode = "popular";
 let loading = false;
+let requestNumber = 0;
 
 const movieGenres = [
-    ["Action", 28],
-    ["Adventure", 12],
-    ["Animation", 16],
-    ["Comedy", 35],
-    ["Crime", 80],
-    ["Documentary", 99],
-    ["Drama", 18],
-    ["Family", 10751],
-    ["Fantasy", 14],
-    ["Horror", 27],
-    ["Mystery", 9648],
-    ["Romance", 10749],
-    ["Science Fiction", 878],
-    ["Thriller", 53]
+    ["Action",28],["Adventure",12],["Animation",16],
+    ["Comedy",35],["Crime",80],["Documentary",99],
+    ["Drama",18],["Family",10751],["Fantasy",14],
+    ["Horror",27],["Mystery",9648],["Romance",10749],
+    ["Science Fiction",878],["Thriller",53]
 ];
 
 const tvGenres = [
-    ["Action & Adventure", 10759],
-    ["Animation", 16],
-    ["Comedy", 35],
-    ["Crime", 80],
-    ["Documentary", 99],
-    ["Drama", 18],
-    ["Family", 10751],
-    ["Kids", 10762],
-    ["Mystery", 9648],
-    ["Reality", 10764],
-    ["Sci-Fi & Fantasy", 10765]
+    ["Action & Adventure",10759],["Animation",16],
+    ["Comedy",35],["Crime",80],["Documentary",99],
+    ["Drama",18],["Family",10751],["Kids",10762],
+    ["Mystery",9648],["Reality",10764],
+    ["Sci-Fi & Fantasy",10765]
 ];
 
 function getGenres() {
-    const list = media === "movie" ? movieGenres : tvGenres;
     const container = document.getElementById("genres");
-
     container.innerHTML = "";
 
     const all = document.createElement("button");
     all.className = "genre active";
     all.textContent = "All";
+
     all.onclick = () => {
-        currentGenre = null;
-        currentQuery = "";
-        currentMode = "popular";
-        currentPage = 1;
-        updateGenreButtons(all);
+        genre = null;
+        query = "";
+        mode = "popular";
+        page = 1;
+        updateGenre(all);
         loadMovies();
     };
 
     container.appendChild(all);
 
-    list.forEach(([name, id]) => {
+    const list = media === "movie" ? movieGenres : tvGenres;
+
+    list.forEach(([name,id]) => {
         const button = document.createElement("button");
         button.className = "genre";
         button.textContent = name;
 
         button.onclick = () => {
-            currentGenre = id;
-            currentQuery = "";
-            currentMode = "genre";
-            currentPage = 1;
-            updateGenreButtons(button);
+            genre = id;
+            query = "";
+            mode = "genre";
+            page = 1;
+            updateGenre(button);
             loadMovies();
         };
 
@@ -583,64 +537,57 @@ function getGenres() {
     });
 }
 
-function updateGenreButtons(selected) {
-    document.querySelectorAll(".genre").forEach(btn => {
-        btn.classList.remove("active");
+function updateGenre(selected) {
+    document.querySelectorAll(".genre").forEach(button => {
+        button.classList.remove("active");
     });
     selected.classList.add("active");
 }
 
 function setMedia(type) {
     media = type;
-    currentGenre = null;
-    currentQuery = "";
-    currentMode = "popular";
-    currentPage = 1;
+    genre = null;
+    query = "";
+    mode = "popular";
+    page = 1;
 
-    document.getElementById("movieTab").classList.toggle(
-        "active", type === "movie"
-    );
+    document.getElementById("movieTab")
+        .classList.toggle("active",type === "movie");
 
-    document.getElementById("tvTab").classList.toggle(
-        "active", type === "tv"
-    );
+    document.getElementById("tvTab")
+        .classList.toggle("active",type === "tv");
 
     document.getElementById("resultTitle").innerHTML =
         type === "movie"
-        ? 'Popular <span>Movies</span>'
-        : 'Popular <span>TV Shows</span>';
+        ? 'Popular <span class="accent">Movies</span>'
+        : 'Popular <span class="accent">TV Shows</span>';
 
     getGenres();
     loadMovies();
-
-    document.getElementById("movies").scrollIntoView({
-        behavior: "smooth"
-    });
 }
 
 function goHome() {
     document.getElementById("details").style.display = "none";
     document.getElementById("movies").style.display = "block";
     document.getElementById("home").style.display = "flex";
-
-    window.scrollTo({top: 0, behavior: "smooth"});
+    window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function buildURL() {
     const params = new URLSearchParams();
 
-    params.set("type", media);
-    params.set("page", currentPage);
+    params.set("type",media);
+    params.set("page",page);
 
-    if (currentMode === "search") {
-        params.set("query", currentQuery);
+    if(mode === "search") {
+        params.set("query",query);
     }
 
-    if (currentMode === "genre" && currentGenre) {
-        if (media === "movie") {
-            params.set("movieGenre", currentGenre);
+    if(mode === "genre" && genre) {
+        if(media === "movie") {
+            params.set("movieGenre",genre);
         } else {
-            params.set("tvGenre", currentGenre);
+            params.set("tvGenre",genre);
         }
     }
 
@@ -648,88 +595,87 @@ function buildURL() {
 }
 
 async function loadMovies(append = false) {
-    if (loading) return;
+    if(loading) return;
 
     loading = true;
+    const request = ++requestNumber;
 
     const grid = document.getElementById("movieGrid");
-    const moreButton = document.getElementById("loadMore");
+    const more = document.getElementById("loadMore");
 
-    if (!append) {
+    if(!append) {
         grid.innerHTML = '<div class="message">Loading...</div>';
     }
 
-    moreButton.disabled = true;
+    more.disabled = true;
 
     try {
         const response = await fetch(buildURL());
 
-        if (!response.ok) {
-            throw new Error("Unable to load movies.");
-        }
+        if(!response.ok) throw new Error("API error");
 
         const data = await response.json();
+
+        if(request !== requestNumber) return;
 
         const results = Array.isArray(data)
             ? data
             : data.results || data.movies || data.data || [];
 
-        if (!append) {
-            grid.innerHTML = "";
-        }
+        if(!append) grid.innerHTML = "";
 
-        if (!results.length && !append) {
+        if(!results.length && !append) {
             grid.innerHTML =
                 '<div class="message">No results found.</div>';
         }
 
-        results.forEach(item => {
-            createMovieCard(item);
-        });
+        results.forEach(createMovieCard);
 
-        moreButton.style.display =
-            results.length > 0 && data.total_pages > currentPage
-            ? "block" : "none";
+        const hasMore = data.total_pages
+            ? page < data.total_pages
+            : results.length > 0;
 
-        if (Array.isArray(data) && results.length > 0) {
-            moreButton.style.display = "block";
-        }
+        more.style.display = hasMore ? "block" : "none";
 
-    } catch (error) {
-        if (!append) {
+    } catch(error) {
+        if(request === requestNumber && !append) {
             grid.innerHTML =
-                '<div class="message">Something went wrong. Please try again later.</div>';
+                '<div class="message">Unable to load content. Please try again later.</div>';
         }
         console.error(error);
+    } finally {
+        if(request === requestNumber) {
+            loading = false;
+            more.disabled = false;
+        }
     }
-
-    loading = false;
-    moreButton.disabled = false;
 }
 
 function createMovieCard(item) {
     const grid = document.getElementById("movieGrid");
 
     const title = item.title || item.name || "Untitled";
+
     const poster = item.poster_path
-        ? imageBase + item.poster_path
-        : placeholder;
+        ? IMAGE_BASE + item.poster_path
+        : PLACEHOLDER;
 
     const rating = item.vote_average
         ? Number(item.vote_average).toFixed(1)
         : "N/A";
 
-    const date = (item.release_date || item.first_air_date || "")
-        .slice(0, 4);
+    const year = (
+        item.release_date || item.first_air_date || ""
+    ).slice(0,4);
 
     const card = document.createElement("div");
     card.className = "movie-card";
 
-    const img = document.createElement("img");
-    img.src = poster;
-    img.alt = title;
-    img.loading = "lazy";
-    img.onerror = () => img.src = placeholder;
+    const image = document.createElement("img");
+    image.src = poster;
+    image.alt = title;
+    image.loading = "lazy";
+    image.onerror = () => image.src = PLACEHOLDER;
 
     const info = document.createElement("div");
     info.className = "movie-info";
@@ -737,15 +683,15 @@ function createMovieCard(item) {
     const heading = document.createElement("h3");
     heading.textContent = title;
 
-    const year = document.createElement("p");
-    year.textContent = date || "Release date unavailable";
+    const date = document.createElement("p");
+    date.textContent = year || "Release date unavailable";
 
     const score = document.createElement("p");
     score.className = "rating";
     score.textContent = "★ " + rating;
 
-    info.append(heading, year, score);
-    card.append(img, info);
+    info.append(heading,date,score);
+    card.append(image,info);
 
     card.onclick = () => openDetails(
         item.id,
@@ -756,149 +702,159 @@ function createMovieCard(item) {
 }
 
 function searchMovies() {
-    const query = document.getElementById("searchInput")
+    const value = document.getElementById("searchInput")
         .value.trim();
 
-    if (!query) return;
+    if(!value) return;
 
-    currentQuery = query;
-    currentMode = "search";
-    currentGenre = null;
-    currentPage = 1;
+    query = value;
+    mode = "search";
+    genre = null;
+    page = 1;
 
     document.getElementById("resultTitle").innerHTML =
-        'Search <span>Results</span>';
+        'Search <span class="accent">Results</span>';
 
-    document.querySelectorAll(".genre").forEach(btn => {
-        btn.classList.remove("active");
+    document.querySelectorAll(".genre").forEach(button => {
+        button.classList.remove("active");
     });
 
     loadMovies();
 }
 
 function loadMore() {
-    currentPage++;
+    if(loading) return;
+    page++;
     loadMovies(true);
 }
 
-async function openDetails(id, type) {
-    if (!id) return;
+async function openDetails(id,type) {
+    if(!id) return;
 
     document.getElementById("movies").style.display = "none";
     document.getElementById("home").style.display = "none";
 
-    const details = document.getElementById("details");
-    details.style.display = "block";
-
+    const section = document.getElementById("details");
     const content = document.getElementById("detailContent");
+
+    section.style.display = "block";
     content.innerHTML = '<p class="message">Loading details...</p>';
 
-    window.scrollTo({top: 0, behavior: "smooth"});
+    window.scrollTo({top:0,behavior:"smooth"});
 
     try {
         const params = new URLSearchParams({
-            id: id,
-            type: type
+            id:id,
+            type:type
         });
 
         const response = await fetch(API + "?" + params);
 
-        if (!response.ok) {
-            throw new Error("Details unavailable");
-        }
+        if(!response.ok) throw new Error("Details unavailable");
 
         const item = await response.json();
 
         const title = item.title || item.name || "Untitled";
         const poster = item.poster_path
-            ? imageBase + item.poster_path
-            : placeholder;
+            ? IMAGE_BASE + item.poster_path
+            : PLACEHOLDER;
 
         const genres = (item.genres || [])
             .map(g => g.name).join(", ");
 
         const cast = (item.credits?.cast || [])
-            .slice(0, 8)
+            .slice(0,8)
             .map(person => person.name).join(", ");
 
-        const creators = item.created_by || [];
-        const director = (item.credits?.crew || [])
+        const directors = (item.credits?.crew || [])
             .filter(person => person.job === "Director")
             .map(person => person.name);
 
-        const people = director.length
-            ? director.join(", ")
-            : creators.map(person => person.name).join(", ");
+        const creators = item.created_by || [];
 
-        const date = item.release_date || item.first_air_date || "";
+        const people = type === "movie"
+            ? directors.join(", ")
+            : creators.map(person => person.name).join(", ");
 
         const trailer = item.videos?.results?.find(video =>
             video.site === "YouTube" &&
             video.type === "Trailer"
         );
 
-        content.innerHTML = `
-            <div class="detail-content">
-                <img src="${poster}"
-                     alt="${escapeHTML(title)}"
-                     onerror="this.src='${placeholder}'">
+        const wrapper = document.createElement("div");
+        wrapper.className = "detail-content";
 
-                <div class="detail-text">
-                    <h2>${escapeHTML(title)}</h2>
+        const image = document.createElement("img");
+        image.src = poster;
+        image.alt = title;
+        image.onerror = () => image.src = PLACEHOLDER;
 
-                    <p><strong>Release:</strong> ${escapeHTML(date || "Unknown")}</p>
+        const text = document.createElement("div");
+        text.className = "detail-text";
 
-                    <p><strong>Rating:</strong>
-                    ★ ${item.vote_average
-                        ? Number(item.vote_average).toFixed(1)
-                        : "N/A"}</p>
+        function addParagraph(label,value) {
+            const p = document.createElement("p");
+            const strong = document.createElement("strong");
+            strong.textContent = label + ": ";
+            p.append(strong,document.createTextNode(value || "Not available"));
+            text.appendChild(p);
+        }
 
-                    <p><strong>Genres:</strong>
-                    ${escapeHTML(genres || "Not available")}</p>
+        const heading = document.createElement("h2");
+        heading.textContent = title;
+        text.appendChild(heading);
 
-                    <p><strong>Overview:</strong>
-                    ${escapeHTML(item.overview || "No description available.")}</p>
+        addParagraph("Release",
+            item.release_date || item.first_air_date);
 
-                    <p><strong>Cast:</strong>
-                    ${escapeHTML(cast || "Not available")}</p>
+        addParagraph("Rating",
+            item.vote_average
+                ? "★ " + Number(item.vote_average).toFixed(1)
+                : "N/A");
 
-                    <p><strong>Director / Creator:</strong>
-                    ${escapeHTML(people || "Not available")}</p>
+        addParagraph("Genres",genres);
+        addParagraph("Overview",item.overview);
+        addParagraph("Cast",cast);
 
-                    <p><strong>Runtime:</strong>
-                    ${item.runtime ? item.runtime + " minutes" : "N/A"}</p>
+        addParagraph(
+            type === "movie" ? "Director" : "Created by",
+            people
+        );
 
-                    <p><strong>Seasons:</strong>
-                    ${item.number_of_seasons || "N/A"}</p>
+        addParagraph("Runtime",
+            item.runtime ? item.runtime + " minutes" : "N/A");
 
-                    <p><strong>Episodes:</strong>
-                    ${item.number_of_episodes || "N/A"}</p>
+        addParagraph("Seasons",
+            item.number_of_seasons ? String(item.number_of_seasons) : "N/A");
 
-                    ${trailer ? `
-                        <button class="trailer-btn"
-                        onclick="window.open('https://www.youtube.com/watch?v=${encodeURIComponent(trailer.key)}','_blank')">
-                        Watch Trailer
-                        </button>
-                    ` : ""}
-                </div>
-            </div>
-        `;
+        addParagraph("Episodes",
+            item.number_of_episodes ? String(item.number_of_episodes) : "N/A");
 
-    } catch (error) {
+        if(trailer) {
+            const button = document.createElement("button");
+            button.className = "primary-btn";
+            button.textContent = "Watch Trailer";
+
+            button.onclick = () => {
+                window.open(
+                    "https://www.youtube.com/watch?v=" +
+                    encodeURIComponent(trailer.key),
+                    "_blank",
+                    "noopener"
+                );
+            };
+
+            text.appendChild(button);
+        }
+
+        wrapper.append(image,text);
+        content.replaceChildren(wrapper);
+
+    } catch(error) {
         content.innerHTML =
             '<p class="message">Unable to load details. Please try again.</p>';
         console.error(error);
     }
-}
-
-function escapeHTML(value) {
-    return String(value).replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-    })[char]);
 }
 
 document.getElementById("year").textContent =
